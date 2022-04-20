@@ -1,0 +1,24 @@
+{
+	"name": "IngestSalesForceLead",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "IngestSalesforceLeadToStagingIn",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2022-03-02T16:15:00Z",
+				"timeZone": "UTC"
+			}
+		}
+	}
+}

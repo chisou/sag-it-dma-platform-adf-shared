@@ -1,0 +1,11 @@
+{
+	"name": "ConnectToStagingIn",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"connectionString": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=stsagitdmamaindev.database.windows.net;Initial Catalog=data-staging-in"
+		}
+	}
+}

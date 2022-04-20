@@ -1,0 +1,17 @@
+{
+	"name": "integrationRuntimeLargeFiles",
+	"properties": {
+		"type": "Managed",
+		"typeProperties": {
+			"computeProperties": {
+				"location": "West Europe",
+				"dataFlowProperties": {
+					"computeType": "MemoryOptimized",
+					"coreCount": 144,
+					"timeToLive": 30,
+					"cleanup": false
+				}
+			}
+		}
+	}
+}

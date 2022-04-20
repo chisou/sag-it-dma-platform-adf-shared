@@ -1,0 +1,37 @@
+{
+	"name": "IngestSalesforceLeadToStagingIn",
+	"properties": {
+		"activities": [
+			{
+				"name": "IngestSalesforceLeadsToStagingInDaily",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "1.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "IngestSalesforceLeadsToStagingInDaily",
+						"type": "DataFlowReference"
+					},
+					"integrationRuntime": {
+						"referenceName": "integrationRuntimeLargeFiles",
+						"type": "IntegrationRuntimeReference"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"folder": {
+			"name": "Salesforce"
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-03-02T16:22:22Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

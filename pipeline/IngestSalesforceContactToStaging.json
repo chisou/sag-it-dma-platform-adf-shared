@@ -1,0 +1,37 @@
+{
+	"name": "IngestSalesforceContactToStaging",
+	"properties": {
+		"activities": [
+			{
+				"name": "IngestSalesforceContactToStagingInDaily",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "1.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "IngestSalesforceContactToStagingInDaily",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"folder": {
+			"name": "Salesforce"
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-03-02T18:22:28Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

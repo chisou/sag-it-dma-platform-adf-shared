@@ -1,0 +1,48 @@
+{
+	"name": "IngestSalesforceFromBlob",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "IngestSalesforceOpportunityToStagingIn",
+					"type": "PipelineReference"
+				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "IngestSalesforceCampaignToStaging",
+					"type": "PipelineReference"
+				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "IngestSalesforceCampaignMemberToStaging",
+					"type": "PipelineReference"
+				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "IngestSalesforceContactToStaging",
+					"type": "PipelineReference"
+				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "IngestSalesforceAccountToStaging",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2022-03-01T15:00:00",
+				"timeZone": "W. Europe Standard Time"
+			}
+		}
+	}
+}

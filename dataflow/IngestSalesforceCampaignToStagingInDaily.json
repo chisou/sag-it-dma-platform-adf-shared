@@ -1,0 +1,41 @@
+{
+	"name": "IngestSalesforceCampaignToStagingInDaily",
+	"properties": {
+		"folder": {
+			"name": "Salesforce"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "SalesforceCampaignFromBlob",
+						"type": "DatasetReference"
+					},
+					"name": "SalesforceCampaignsFromBlob"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "StgSfCampaignToStagingIn",
+						"type": "DatasetReference"
+					},
+					"name": "StoreToDatabase"
+				}
+			],
+			"transformations": [
+				{
+					"name": "JsonToTabularFormat"
+				},
+				{
+					"name": "RemoveNullValuesFromId"
+				},
+				{
+					"name": "ConvertDatesFromStringToDate"
+				}
+			],
+			"script": "source(output(\n\t\tCampaign as ({@xsi:type} as string, ActualCost as double, Board_Responsible__c as string, BudgetedCost as double, CampaignMemberRecordTypeId as string, Campaign_Members_Count__c as double, Campaign_Sub_Type__c as string, Campaign_Target_Audience_Profile__c as string, Campaign_Target_Audience__c as string, Classification_CampaignCategory__c as string, Classification_SolutionType__c as string, Cluster__c as string, Cost_Per_Opportunity__c as double, CreatedDate as string, CurrencyIsoCode as string, Data_Flag__c as boolean, Division__c as string, EndDate as date, Global_Campaign__c as string, HierarchyActualCost as double, HierarchyBudgetedCost as double, HierarchyNumberOfContacts as integer, HierarchyNumberOfConvertedLeads as short, HierarchyNumberOfLeads as integer, HierarchyNumberOfOpportunities as short, HierarchyNumberOfResponses as integer, Horizontal_Vertical_Campign__c as string, Id as string, KeyWords__c as string, LastModifiedDate as string, MQLs__c as double, Name as string, NumberOfContacts as integer, NumberOfConvertedLeads as short, NumberOfLeads as integer, NumberOfOpportunities as short, NumberOfResponses as short, OwnerId as string, ParentId as string, RecordTypeId as string, SAG_Organization__c as string, SAG_ROI__c as double, SALs__c as double, SQLs__c as double, SQOs__c as double, SRLs__c as double, Sales_Play_Sub_Campaign__c as string, StartDate as date, Status as string, Total_Contacts_Responded__c as double, Total_Leads_Responded__c as double, Type as string, {ens:type} as string)[]\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'IngestionDate',\n\tdocumentForm: 'documentPerLine') ~> SalesforceCampaignsFromBlob\nSalesforceCampaignsFromBlob foldDown(unroll(Campaign),\n\tmapColumn(\n\t\tActualCost = Campaign.ActualCost,\n\t\tBoard_Responsible__c = Campaign.Board_Responsible__c,\n\t\tBudgetedCost = Campaign.BudgetedCost,\n\t\tCampaignMemberRecordTypeId = Campaign.CampaignMemberRecordTypeId,\n\t\tCampaign_Members_Count__c = Campaign.Campaign_Members_Count__c,\n\t\tCampaign_Sub_Type__c = Campaign.Campaign_Sub_Type__c,\n\t\tCampaign_Target_Audience_Profile__c = Campaign.Campaign_Target_Audience_Profile__c,\n\t\tCampaign_Target_Audience__c = Campaign.Campaign_Target_Audience__c,\n\t\tClassification_CampaignCategory__c = Campaign.Classification_CampaignCategory__c,\n\t\tClassification_SolutionType__c = Campaign.Classification_SolutionType__c,\n\t\tCluster__c = Campaign.Cluster__c,\n\t\tCost_Per_Opportunity__c = Campaign.Cost_Per_Opportunity__c,\n\t\tCreatedDate = Campaign.CreatedDate,\n\t\tCurrencyIsoCode = Campaign.CurrencyIsoCode,\n\t\tData_Flag__c = Campaign.Data_Flag__c,\n\t\tDivision__c = Campaign.Division__c,\n\t\tEndDate = Campaign.EndDate,\n\t\tGlobal_Campaign__c = Campaign.Global_Campaign__c,\n\t\tHierarchyActualCost = Campaign.HierarchyActualCost,\n\t\tHierarchyBudgetedCost = Campaign.HierarchyBudgetedCost,\n\t\tHierarchyNumberOfContacts = Campaign.HierarchyNumberOfContacts,\n\t\tHierarchyNumberOfConvertedLeads = Campaign.HierarchyNumberOfConvertedLeads,\n\t\tHierarchyNumberOfLeads = Campaign.HierarchyNumberOfLeads,\n\t\tHierarchyNumberOfOpportunities = Campaign.HierarchyNumberOfOpportunities,\n\t\tHierarchyNumberOfResponses = Campaign.HierarchyNumberOfResponses,\n\t\tHorizontal_Vertical_Campign__c = Campaign.Horizontal_Vertical_Campign__c,\n\t\tId = Campaign.Id,\n\t\tKeyWords__c = Campaign.KeyWords__c,\n\t\tLastModifiedDate = Campaign.LastModifiedDate,\n\t\tMQLs__c = Campaign.MQLs__c,\n\t\tName = Campaign.Name,\n\t\tNumberOfContacts = Campaign.NumberOfContacts,\n\t\tNumberOfConvertedLeads = Campaign.NumberOfConvertedLeads,\n\t\tNumberOfLeads = Campaign.NumberOfLeads,\n\t\tNumberOfOpportunities = Campaign.NumberOfOpportunities,\n\t\tNumberOfResponses = Campaign.NumberOfResponses,\n\t\tOwnerId = Campaign.OwnerId,\n\t\tParentId = Campaign.ParentId,\n\t\tRecordTypeId = Campaign.RecordTypeId,\n\t\tSAG_Organization__c = Campaign.SAG_Organization__c,\n\t\tSAG_ROI__c = Campaign.SAG_ROI__c,\n\t\tSALs__c = Campaign.SALs__c,\n\t\tSQLs__c = Campaign.SQLs__c,\n\t\tSQOs__c = Campaign.SQOs__c,\n\t\tSRLs__c = Campaign.SRLs__c,\n\t\tSales_Play_Sub_Campaign__c = Campaign.Sales_Play_Sub_Campaign__c,\n\t\tStartDate = Campaign.StartDate,\n\t\tStatus = Campaign.Status,\n\t\tTotal_Contacts_Responded__c = Campaign.Total_Contacts_Responded__c,\n\t\tTotal_Leads_Responded__c = Campaign.Total_Leads_Responded__c,\n\t\tType = Campaign.Type,\n\t\tIngestionDate\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> JsonToTabularFormat\nJsonToTabularFormat filter(not(isNull(Id))) ~> RemoveNullValuesFromId\nRemoveNullValuesFromId derive(IngestionDate = toDate(split(split(IngestionDate, '/')[6],'_')[1]),\n\t\tCreatedDate = toDate(CreatedDate),\n\t\tLastModifiedDate = toDate(LastModifiedDate)) ~> ConvertDatesFromStringToDate\nConvertDatesFromStringToDate sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> StoreToDatabase"
+		}
+	}
+}

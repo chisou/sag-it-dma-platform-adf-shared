@@ -1,0 +1,20 @@
+{
+	"name": "StgSfContactToStagingIn",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ConnectToStagingIn",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Salesforce"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "STG",
+			"table": "STG_SF_Contact"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
