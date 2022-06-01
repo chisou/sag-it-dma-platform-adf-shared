@@ -1,0 +1,24 @@
+{
+	"name": "SalesforceAccountFromBlob_Test",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ConnectionToBlob",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Salesforce"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "2022-05-21_Account.json",
+				"folderPath": "Salesforce/Account/2022/05",
+				"container": "stsagitdmastagingmarketing"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
