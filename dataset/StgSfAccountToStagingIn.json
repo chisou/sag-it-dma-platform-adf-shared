@@ -2,7 +2,7 @@
 	"name": "StgSfAccountToStagingIn",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "ConnectToStagingIn",
+			"referenceName": "ConnectToStagingInWrkMarketing",
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
