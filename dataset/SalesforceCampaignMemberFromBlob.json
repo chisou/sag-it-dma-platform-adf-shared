@@ -21,7 +21,208 @@
 				"container": "stsagitdmastagingmarketing"
 			}
 		},
-		"schema": {}
+		"schema": {
+			"type": "object",
+			"properties": {
+				"CampaignMember": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"Id": {
+								"type": "string"
+							},
+							"CampaignId": {
+								"type": "string"
+							},
+							"LeadId": {
+								"type": "string"
+							},
+							"ContactId": {
+								"type": "string"
+							},
+							"Status": {
+								"type": "string"
+							},
+							"HasResponded": {
+								"type": "boolean"
+							},
+							"CreatedDate": {
+								"type": "string"
+							},
+							"CreatedById": {
+								"type": "string"
+							},
+							"LastModifiedDate": {
+								"type": "string"
+							},
+							"FirstRespondedDate": {
+								"type": "date"
+							},
+							"CurrencyIsoCode": {
+								"type": "string"
+							},
+							"Title": {
+								"type": "null"
+							},
+							"State": {
+								"type": "string"
+							},
+							"Country": {
+								"type": "string"
+							},
+							"CompanyOrAccount": {
+								"type": "string"
+							},
+							"Type": {
+								"type": "string"
+							},
+							"LeadOrContactId": {
+								"type": "string"
+							},
+							"Member_Country__c": {
+								"type": "string"
+							},
+							"First_Activity_Date__c": {
+								"type": "string"
+							},
+							"Marketing_Status__c": {
+								"type": "string"
+							},
+							"First_Activity_Type__c": {
+								"type": "string"
+							},
+							"First_Call_Meeting_Date__c": {
+								"type": "string"
+							},
+							"IsMQLClosed__c": {
+								"type": "boolean"
+							},
+							"MQL_Date__c": {
+								"type": "string"
+							},
+							"Number_of_Activities__c": {
+								"type": "double"
+							},
+							"Opportunity__c": {
+								"type": "string"
+							},
+							"Qualified_Out_Reason__c": {
+								"type": "string"
+							},
+							"SAL_Date__c": {
+								"type": "string"
+							},
+							"SAL__c": {
+								"type": "boolean"
+							},
+							"SQL__c": {
+								"type": "boolean"
+							},
+							"SQO__c": {
+								"type": "boolean"
+							},
+							"SRL_Date__c": {
+								"type": "string"
+							},
+							"SRL__c": {
+								"type": "boolean"
+							},
+							"MQL__c": {
+								"type": "boolean"
+							},
+							"Opportunity_Amount__c": {
+								"type": "double"
+							},
+							"Opportunity_Closed_Won__c": {
+								"type": "boolean"
+							},
+							"Opportunity_Created_By__c": {
+								"type": "string"
+							},
+							"Opportunity_Probability__c": {
+								"type": "double"
+							},
+							"Opportunity_Stage__c": {
+								"type": "string"
+							},
+							"Opportunity_Type__c": {
+								"type": "string"
+							},
+							"SQL_Date__c": {
+								"type": "string"
+							},
+							"SQO_Date__c": {
+								"type": "date"
+							},
+							"SAG_Organization__c": {
+								"type": "string"
+							},
+							"Board_Responsible__c": {
+								"type": "string"
+							},
+							"Date_of_First_Action__c": {
+								"type": "string"
+							},
+							"Has_Activity__c": {
+								"type": "boolean"
+							},
+							"Has_Call_Meeting__c": {
+								"type": "boolean"
+							},
+							"Has_First_Action__c": {
+								"type": "boolean"
+							},
+							"MQL_Age__c": {
+								"type": "double"
+							},
+							"Industry__c": {
+								"type": "string"
+							},
+							"Sales_Region__c": {
+								"type": "string"
+							},
+							"Sales_Sub_Region__c": {
+								"type": "string"
+							},
+							"Annual_Revenue_Range__c": {
+								"type": "string"
+							},
+							"Go_To_Market_Segmentation__c": {
+								"type": "string"
+							},
+							"MQL_Exclusion_Reason__c": {
+								"type": "string"
+							},
+							"Asset__c": {
+								"type": "string"
+							},
+							"Campaign_Region__c": {
+								"type": "string"
+							},
+							"Medium__c": {
+								"type": "string"
+							},
+							"DQL_Date__c": {
+								"type": "date"
+							},
+							"DQL__c": {
+								"type": "boolean"
+							},
+							"Contact_Created_Date__c": {
+								"type": "date"
+							},
+							"Lead_Created_Date__c": {
+								"type": "date"
+							},
+							"Inbound_Lead__c": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			}
+		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
 }
