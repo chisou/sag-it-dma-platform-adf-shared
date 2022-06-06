@@ -21,7 +21,199 @@
 				"container": "stsagitdmastagingmarketing"
 			}
 		},
-		"schema": {}
+		"schema": {
+			"type": "object",
+			"properties": {
+				"Account": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"Id": {
+								"type": "string"
+							},
+							"Name": {
+								"type": "string"
+							},
+							"Type": {
+								"type": "string"
+							},
+							"ParentId": {
+								"type": "string"
+							},
+							"Website": {
+								"type": "string"
+							},
+							"Industry": {
+								"type": "string"
+							},
+							"AnnualRevenue": {
+								"type": "double"
+							},
+							"NumberOfEmployees": {
+								"type": "integer"
+							},
+							"CurrencyIsoCode": {
+								"type": "string"
+							},
+							"OwnerId": {
+								"type": "string"
+							},
+							"CreatedDate": {
+								"type": "string"
+							},
+							"LastModifiedDate": {
+								"type": "string"
+							},
+							"LastActivityDate": {
+								"type": "date"
+							},
+							"Opportunity_Count__c": {
+								"type": "double"
+							},
+							"Classification_AnnualRev_Range__c": {
+								"type": "string"
+							},
+							"Key_Accounts__c": {
+								"type": "boolean"
+							},
+							"Classification_EmployeesRange__c": {
+								"type": "string"
+							},
+							"Partner_Level__c": {
+								"type": "string"
+							},
+							"Has_Altify_Account__c": {
+								"type": "double"
+							},
+							"Date_of_First_Contact__c": {
+								"type": "date"
+							},
+							"SAG_Organization__c": {
+								"type": "string"
+							},
+							"Industry_Sub__c": {
+								"type": "string"
+							},
+							"Address_Visit_Country__c": {
+								"type": "string"
+							},
+							"Address_Visit_State__c": {
+								"type": "string"
+							},
+							"Classification_PersonalPriority__c": {
+								"type": "string"
+							},
+							"Type_Sub__c": {
+								"type": "string"
+							},
+							"KeyWords__c": {
+								"type": "string"
+							},
+							"Account_ID_with_18_Char__c": {
+								"type": "string"
+							},
+							"Classification_Status__c": {
+								"type": "string"
+							},
+							"Board_Responsible__c": {
+								"type": "string"
+							},
+							"Division__c": {
+								"type": "string"
+							},
+							"Cluster__c": {
+								"type": "string"
+							},
+							"Sales_Region__c": {
+								"type": "string"
+							},
+							"Sales_Sub_Region__c": {
+								"type": "string"
+							},
+							"Domestic_Ultimate_DUNS_Number__c": {
+								"type": "string"
+							},
+							"Global_Ultimate_DUNS_Number__c": {
+								"type": "string"
+							},
+							"Go_To_Market_Segmentation__c": {
+								"type": "string"
+							},
+							"DUNS_Number__c": {
+								"type": "string"
+							},
+							"Account_Owner_Role__c": {
+								"type": "string"
+							},
+							"Website_Domain__c": {
+								"type": "string"
+							},
+							"Customer_Classification__c": {
+								"type": "short"
+							},
+							"accountIntentScore6sense_IoT__c": {
+								"type": "double"
+							},
+							"accountProfileFit6sense_IoT__c": {
+								"type": "string"
+							},
+							"accountBuyingStage6sense_IoT__c": {
+								"type": "string"
+							},
+							"DNBoptimizer__DNB_D_U_N_S_Number__c": {
+								"type": "string"
+							},
+							"DNBoptimizer__DnBCompanyRecord__c": {
+								"type": "string"
+							},
+							"Opportunity_Bookings_Open__c": {
+								"type": "double"
+							},
+							"Opportunity_Count_Open__c": {
+								"type": "double"
+							},
+							"SAP_Contract_Count_Active__c": {
+								"type": "double"
+							},
+							"SAP_Contract_Count__c": {
+								"type": "double"
+							},
+							"Parent_Account_Account_Id_18__c": {
+								"type": "string"
+							},
+							"accountBuyingStage6sense_INT__c": {
+								"type": "string"
+							},
+							"accountIntentScore6sense_INT__c": {
+								"type": "double"
+							},
+							"accountProfileFit6sense_INT__c": {
+								"type": "string"
+							},
+							"accountReachScore6sense_INT__c": {
+								"type": "string"
+							},
+							"accountReachScore6sense_IoT__c": {
+								"type": "string"
+							},
+							"A2_Likely_to_Convert__c": {
+								"type": "string"
+							},
+							"A_N_Likely_to_Convert__c": {
+								"type": "string"
+							},
+							"Integration_Likely_To_Convert__c": {
+								"type": "string"
+							},
+							"IoT_Likely_to_Convert__c": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			}
+		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
 }
