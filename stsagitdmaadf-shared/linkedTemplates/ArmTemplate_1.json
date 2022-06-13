@@ -1,0 +1,762 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "stsagitdmaadf-shared"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/IngestSalesforceCampaignToStagingInDaily')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Salesforce"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "SalesforceCampaignFromBlob",
+								"type": "DatasetReference"
+							},
+							"name": "SalesforceCampaignsFromBlob"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "StgSfCampaignToStagingIn",
+								"type": "DatasetReference"
+							},
+							"name": "StoreToDatabase"
+						}
+					],
+					"transformations": [
+						{
+							"name": "JsonToTabularFormat"
+						},
+						{
+							"name": "RemoveNullValuesFromId"
+						},
+						{
+							"name": "ConvertDatesFromStringToDate"
+						}
+					],
+					"script": "source(output(\n\t\tCampaign as ({@xsi:type} as string, ActualCost as double, Board_Responsible__c as string, BudgetedCost as double, CampaignMemberRecordTypeId as string, Campaign_Members_Count__c as double, Campaign_Sub_Type__c as string, Campaign_Target_Audience_Profile__c as string, Campaign_Target_Audience__c as string, Classification_CampaignCategory__c as string, Classification_SolutionType__c as string, Cluster__c as string, Cost_Per_Opportunity__c as double, CreatedDate as string, CurrencyIsoCode as string, Data_Flag__c as boolean, Division__c as string, EndDate as date, Global_Campaign__c as string, HierarchyActualCost as double, HierarchyBudgetedCost as double, HierarchyNumberOfContacts as integer, HierarchyNumberOfConvertedLeads as short, HierarchyNumberOfLeads as integer, HierarchyNumberOfOpportunities as short, HierarchyNumberOfResponses as integer, Horizontal_Vertical_Campign__c as string, Id as string, KeyWords__c as string, LastModifiedDate as string, MQLs__c as double, Name as string, NumberOfContacts as integer, NumberOfConvertedLeads as short, NumberOfLeads as integer, NumberOfOpportunities as short, NumberOfResponses as short, OwnerId as string, ParentId as string, RecordTypeId as string, SAG_Organization__c as string, SAG_ROI__c as double, SALs__c as double, SQLs__c as double, SQOs__c as double, SRLs__c as double, Sales_Play_Sub_Campaign__c as string, StartDate as date, Status as string, Total_Contacts_Responded__c as double, Total_Leads_Responded__c as double, Type as string, {ens:type} as string)[]\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'IngestionDate',\n\tdocumentForm: 'documentPerLine') ~> SalesforceCampaignsFromBlob\nSalesforceCampaignsFromBlob foldDown(unroll(Campaign),\n\tmapColumn(\n\t\tActualCost = Campaign.ActualCost,\n\t\tBoard_Responsible__c = Campaign.Board_Responsible__c,\n\t\tBudgetedCost = Campaign.BudgetedCost,\n\t\tCampaignMemberRecordTypeId = Campaign.CampaignMemberRecordTypeId,\n\t\tCampaign_Members_Count__c = Campaign.Campaign_Members_Count__c,\n\t\tCampaign_Sub_Type__c = Campaign.Campaign_Sub_Type__c,\n\t\tCampaign_Target_Audience_Profile__c = Campaign.Campaign_Target_Audience_Profile__c,\n\t\tCampaign_Target_Audience__c = Campaign.Campaign_Target_Audience__c,\n\t\tClassification_CampaignCategory__c = Campaign.Classification_CampaignCategory__c,\n\t\tClassification_SolutionType__c = Campaign.Classification_SolutionType__c,\n\t\tCluster__c = Campaign.Cluster__c,\n\t\tCost_Per_Opportunity__c = Campaign.Cost_Per_Opportunity__c,\n\t\tCreatedDate = Campaign.CreatedDate,\n\t\tCurrencyIsoCode = Campaign.CurrencyIsoCode,\n\t\tData_Flag__c = Campaign.Data_Flag__c,\n\t\tDivision__c = Campaign.Division__c,\n\t\tEndDate = Campaign.EndDate,\n\t\tGlobal_Campaign__c = Campaign.Global_Campaign__c,\n\t\tHierarchyActualCost = Campaign.HierarchyActualCost,\n\t\tHierarchyBudgetedCost = Campaign.HierarchyBudgetedCost,\n\t\tHierarchyNumberOfContacts = Campaign.HierarchyNumberOfContacts,\n\t\tHierarchyNumberOfConvertedLeads = Campaign.HierarchyNumberOfConvertedLeads,\n\t\tHierarchyNumberOfLeads = Campaign.HierarchyNumberOfLeads,\n\t\tHierarchyNumberOfOpportunities = Campaign.HierarchyNumberOfOpportunities,\n\t\tHierarchyNumberOfResponses = Campaign.HierarchyNumberOfResponses,\n\t\tHorizontal_Vertical_Campign__c = Campaign.Horizontal_Vertical_Campign__c,\n\t\tId = Campaign.Id,\n\t\tKeyWords__c = Campaign.KeyWords__c,\n\t\tLastModifiedDate = Campaign.LastModifiedDate,\n\t\tMQLs__c = Campaign.MQLs__c,\n\t\tName = Campaign.Name,\n\t\tNumberOfContacts = Campaign.NumberOfContacts,\n\t\tNumberOfConvertedLeads = Campaign.NumberOfConvertedLeads,\n\t\tNumberOfLeads = Campaign.NumberOfLeads,\n\t\tNumberOfOpportunities = Campaign.NumberOfOpportunities,\n\t\tNumberOfResponses = Campaign.NumberOfResponses,\n\t\tOwnerId = Campaign.OwnerId,\n\t\tParentId = Campaign.ParentId,\n\t\tRecordTypeId = Campaign.RecordTypeId,\n\t\tSAG_Organization__c = Campaign.SAG_Organization__c,\n\t\tSAG_ROI__c = Campaign.SAG_ROI__c,\n\t\tSALs__c = Campaign.SALs__c,\n\t\tSQLs__c = Campaign.SQLs__c,\n\t\tSQOs__c = Campaign.SQOs__c,\n\t\tSRLs__c = Campaign.SRLs__c,\n\t\tSales_Play_Sub_Campaign__c = Campaign.Sales_Play_Sub_Campaign__c,\n\t\tStartDate = Campaign.StartDate,\n\t\tStatus = Campaign.Status,\n\t\tTotal_Contacts_Responded__c = Campaign.Total_Contacts_Responded__c,\n\t\tTotal_Leads_Responded__c = Campaign.Total_Leads_Responded__c,\n\t\tType = Campaign.Type,\n\t\tIngestionDate\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> JsonToTabularFormat\nJsonToTabularFormat filter(not(isNull(Id))) ~> RemoveNullValuesFromId\nRemoveNullValuesFromId derive(IngestionDate = toDate(split(split(IngestionDate, '/')[6],'_')[1]),\n\t\tCreatedDate = toDate(CreatedDate),\n\t\tLastModifiedDate = toDate(LastModifiedDate)) ~> ConvertDatesFromStringToDate\nConvertDatesFromStringToDate sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> StoreToDatabase"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/IngestSalesforceCampaignToStagingInInitialLoad')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Salesforce"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "SalesforceCampaignFromBlob",
+								"type": "DatasetReference"
+							},
+							"name": "SalesforceCampaignsFromBlob"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "StgSfCampaignToStagingIn",
+								"type": "DatasetReference"
+							},
+							"name": "StoreToDatabase"
+						}
+					],
+					"transformations": [
+						{
+							"name": "JsonToTabularFormat"
+						},
+						{
+							"name": "RemoveNullValuesFromId"
+						},
+						{
+							"name": "ConvertDatesFromStringToDate"
+						}
+					],
+					"script": "source(output(\n\t\tCampaign as ({@xsi:type} as string, ActualCost as double, Board_Responsible__c as string, BudgetedCost as double, CampaignMemberRecordTypeId as string, Campaign_Members_Count__c as double, Campaign_Sub_Type__c as string, Campaign_Target_Audience_Profile__c as string, Campaign_Target_Audience__c as string, Classification_CampaignCategory__c as string, Classification_SolutionType__c as string, Cluster__c as string, Cost_Per_Opportunity__c as double, CreatedDate as string, CurrencyIsoCode as string, Data_Flag__c as boolean, Division__c as string, EndDate as date, Global_Campaign__c as string, HierarchyActualCost as double, HierarchyBudgetedCost as double, HierarchyNumberOfContacts as integer, HierarchyNumberOfConvertedLeads as short, HierarchyNumberOfLeads as integer, HierarchyNumberOfOpportunities as short, HierarchyNumberOfResponses as integer, Horizontal_Vertical_Campign__c as string, Id as string, KeyWords__c as string, LastModifiedDate as string, MQLs__c as double, Name as string, NumberOfContacts as integer, NumberOfConvertedLeads as short, NumberOfLeads as integer, NumberOfOpportunities as short, NumberOfResponses as short, OwnerId as string, ParentId as string, RecordTypeId as string, SAG_Organization__c as string, SAG_ROI__c as double, SALs__c as double, SQLs__c as double, SQOs__c as double, SRLs__c as double, Sales_Play_Sub_Campaign__c as string, StartDate as date, Status as string, Total_Contacts_Responded__c as double, Total_Leads_Responded__c as double, Type as string, {ens:type} as string)[]\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'IngestionDate',\n\tdocumentForm: 'documentPerLine',\n\twildcardPaths:['Salesforce/Campaign/*/*/*.json']) ~> SalesforceCampaignsFromBlob\nSalesforceCampaignsFromBlob foldDown(unroll(Campaign),\n\tmapColumn(\n\t\tActualCost = Campaign.ActualCost,\n\t\tBoard_Responsible__c = Campaign.Board_Responsible__c,\n\t\tBudgetedCost = Campaign.BudgetedCost,\n\t\tCampaignMemberRecordTypeId = Campaign.CampaignMemberRecordTypeId,\n\t\tCampaign_Members_Count__c = Campaign.Campaign_Members_Count__c,\n\t\tCampaign_Sub_Type__c = Campaign.Campaign_Sub_Type__c,\n\t\tCampaign_Target_Audience_Profile__c = Campaign.Campaign_Target_Audience_Profile__c,\n\t\tCampaign_Target_Audience__c = Campaign.Campaign_Target_Audience__c,\n\t\tClassification_CampaignCategory__c = Campaign.Classification_CampaignCategory__c,\n\t\tClassification_SolutionType__c = Campaign.Classification_SolutionType__c,\n\t\tCluster__c = Campaign.Cluster__c,\n\t\tCost_Per_Opportunity__c = Campaign.Cost_Per_Opportunity__c,\n\t\tCreatedDate = Campaign.CreatedDate,\n\t\tCurrencyIsoCode = Campaign.CurrencyIsoCode,\n\t\tData_Flag__c = Campaign.Data_Flag__c,\n\t\tDivision__c = Campaign.Division__c,\n\t\tEndDate = Campaign.EndDate,\n\t\tGlobal_Campaign__c = Campaign.Global_Campaign__c,\n\t\tHierarchyActualCost = Campaign.HierarchyActualCost,\n\t\tHierarchyBudgetedCost = Campaign.HierarchyBudgetedCost,\n\t\tHierarchyNumberOfContacts = Campaign.HierarchyNumberOfContacts,\n\t\tHierarchyNumberOfConvertedLeads = Campaign.HierarchyNumberOfConvertedLeads,\n\t\tHierarchyNumberOfLeads = Campaign.HierarchyNumberOfLeads,\n\t\tHierarchyNumberOfOpportunities = Campaign.HierarchyNumberOfOpportunities,\n\t\tHierarchyNumberOfResponses = Campaign.HierarchyNumberOfResponses,\n\t\tHorizontal_Vertical_Campign__c = Campaign.Horizontal_Vertical_Campign__c,\n\t\tId = Campaign.Id,\n\t\tKeyWords__c = Campaign.KeyWords__c,\n\t\tLastModifiedDate = Campaign.LastModifiedDate,\n\t\tMQLs__c = Campaign.MQLs__c,\n\t\tName = Campaign.Name,\n\t\tNumberOfContacts = Campaign.NumberOfContacts,\n\t\tNumberOfConvertedLeads = Campaign.NumberOfConvertedLeads,\n\t\tNumberOfLeads = Campaign.NumberOfLeads,\n\t\tNumberOfOpportunities = Campaign.NumberOfOpportunities,\n\t\tNumberOfResponses = Campaign.NumberOfResponses,\n\t\tOwnerId = Campaign.OwnerId,\n\t\tParentId = Campaign.ParentId,\n\t\tRecordTypeId = Campaign.RecordTypeId,\n\t\tSAG_Organization__c = Campaign.SAG_Organization__c,\n\t\tSAG_ROI__c = Campaign.SAG_ROI__c,\n\t\tSALs__c = Campaign.SALs__c,\n\t\tSQLs__c = Campaign.SQLs__c,\n\t\tSQOs__c = Campaign.SQOs__c,\n\t\tSRLs__c = Campaign.SRLs__c,\n\t\tSales_Play_Sub_Campaign__c = Campaign.Sales_Play_Sub_Campaign__c,\n\t\tStartDate = Campaign.StartDate,\n\t\tStatus = Campaign.Status,\n\t\tTotal_Contacts_Responded__c = Campaign.Total_Contacts_Responded__c,\n\t\tTotal_Leads_Responded__c = Campaign.Total_Leads_Responded__c,\n\t\tType = Campaign.Type,\n\t\tIngestionDate\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> JsonToTabularFormat\nJsonToTabularFormat filter(not(isNull(Id))) ~> RemoveNullValuesFromId\nRemoveNullValuesFromId derive(IngestionDate = toDate(split(split(IngestionDate, '/')[6],'_')[1]),\n\t\tCreatedDate = toDate(CreatedDate),\n\t\tLastModifiedDate = toDate(LastModifiedDate)) ~> ConvertDatesFromStringToDate\nConvertDatesFromStringToDate sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> StoreToDatabase"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/IngestSalesforceContactToStagingInDaily')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Salesforce"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "SalesforceContactFromBlob",
+								"type": "DatasetReference"
+							},
+							"name": "SalesforceContactsFromBlob"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "StgSfContactToStagingIn",
+								"type": "DatasetReference"
+							},
+							"name": "StoreToDatabase"
+						}
+					],
+					"transformations": [
+						{
+							"name": "JsonToTabularFormat"
+						},
+						{
+							"name": "RemoveNullValuesFromId"
+						},
+						{
+							"name": "ConvertDatesFromStringToDate"
+						}
+					],
+					"script": "source(output(\n\t\tContact as ({@xsi:type} as string, ARIS_Trial_Logins_Contact__c as string, AccountId as string, Account_Country__c as string, Activity_after_MQL__c as boolean, Address_Visit_Country__c as string, Asset__c as string, Behavior_Score__c as double, Contact_DepartmentType__c as string, Contact_ID_with_18_Char__c as string, Contact_Type__c as string, CreatedDate as string, CurrencyIsoCode as string, Current_MQL_ID__c as string, DNBoptimizer__DnBContactRecord__c as string, Demographic_Score__c as double, Id as string, Industry_SDR_filter_use__c as string, Job_Title_Standardized__c as string, KeyWords__c as string, LastActivityDate as date, LastModifiedDate as string, Lead_BU_Playbook__c as string, MQL_Date__c as string, Marketing_Status__c as string, Marketo_Do_Not_Sync__c as boolean, Most_Recent_Campaign_Date__c as string, Most_Recent_Campaign_Sales_Playbook__c as string, Most_Recent_Campaign_Status__c as string, Most_Recent_Campaign__c as string, Most_Recent_MQL_Date__c as string, Outreach_Actively_Being_Sequenced__c as boolean, Outreach_Date_Added_to_Sequence__c as date, Qualified_Out_Reason__c as string, RecordTypeId as string, SAG_Organization__c as string, SAG_UserGroup__c as string, Sales_Region_Account__c as string, Sales_Sub_Region_Account__c as string, Status__c as string, Title as string, accountBuyingStage6sense_INT__c as string, accountBuyingStage6sense_IoT__c as string, accountIntentScore6sense_INT__c as string, accountIntentScore6sense_IoT__c as string, accountProfileFit6sense_INT__c as string, bizible2__Ad_Campaign_Name_FT__c as string, bizible2__Ad_Campaign_Name_LC__c as string, bizible2__BizibleId__c as string, bizible2__Landing_Page_FT__c as string, bizible2__Landing_Page_LC__c as string, bizible2__Marketing_Channel_FT__c as string, bizible2__Marketing_Channel_LC__c as string, bizible2__Touchpoint_Date_FT__c as string, bizible2__Touchpoint_Date_LC__c as string, bizible2__Touchpoint_Source_FT__c as string, bizible2__Touchpoint_Source_LC__c as string, contactGrade6sense_INT__c as string, contactGrade_IoT__c as string, contactIntentScore6sense_INT__c as string, contactIntentScore6sense_IoT__c as double, contactProfileFit6sense_INT__c as string, contactProfileFit6sense_IoT__c as string, {ens:type} as string, mkto71_Lead_Score__c as double)[]\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'IngestionDate',\n\tdocumentForm: 'documentPerLine') ~> SalesforceContactsFromBlob\nSalesforceContactsFromBlob foldDown(unroll(Contact),\n\tmapColumn(\n\t\tARIS_Trial_Logins_Contact__c = Contact.ARIS_Trial_Logins_Contact__c,\n\t\tAccountId = Contact.AccountId,\n\t\tAccount_Country__c = Contact.Account_Country__c,\n\t\tActivity_after_MQL__c = Contact.Activity_after_MQL__c,\n\t\tAddress_Visit_Country__c = Contact.Address_Visit_Country__c,\n\t\tAsset__c = Contact.Asset__c,\n\t\tBehavior_Score__c = Contact.Behavior_Score__c,\n\t\tContact_DepartmentType__c = Contact.Contact_DepartmentType__c,\n\t\tContact_ID_with_18_Char__c = Contact.Contact_ID_with_18_Char__c,\n\t\tContact_Type__c = Contact.Contact_Type__c,\n\t\tCreatedDate = Contact.CreatedDate,\n\t\tCurrencyIsoCode = Contact.CurrencyIsoCode,\n\t\tCurrent_MQL_ID__c = Contact.Current_MQL_ID__c,\n\t\tDNBoptimizer__DnBContactRecord__c = Contact.DNBoptimizer__DnBContactRecord__c,\n\t\tDemographic_Score__c = Contact.Demographic_Score__c,\n\t\tId = Contact.Id,\n\t\tIndustry_SDR_filter_use__c = Contact.Industry_SDR_filter_use__c,\n\t\tJob_Title_Standardized__c = Contact.Job_Title_Standardized__c,\n\t\tKeyWords__c = Contact.KeyWords__c,\n\t\tLastActivityDate = Contact.LastActivityDate,\n\t\tLastModifiedDate = Contact.LastModifiedDate,\n\t\tLead_BU_Playbook__c = Contact.Lead_BU_Playbook__c,\n\t\tMQL_Date__c = Contact.MQL_Date__c,\n\t\tMarketing_Status__c = Contact.Marketing_Status__c,\n\t\tMarketo_Do_Not_Sync__c = Contact.Marketo_Do_Not_Sync__c,\n\t\tMost_Recent_Campaign_Date__c = Contact.Most_Recent_Campaign_Date__c,\n\t\tMost_Recent_Campaign_Sales_Playbook__c = Contact.Most_Recent_Campaign_Sales_Playbook__c,\n\t\tMost_Recent_Campaign_Status__c = Contact.Most_Recent_Campaign_Status__c,\n\t\tMost_Recent_Campaign__c = Contact.Most_Recent_Campaign__c,\n\t\tMost_Recent_MQL_Date__c = Contact.Most_Recent_MQL_Date__c,\n\t\tOutreach_Actively_Being_Sequenced__c = Contact.Outreach_Actively_Being_Sequenced__c,\n\t\tOutreach_Date_Added_to_Sequence__c = Contact.Outreach_Date_Added_to_Sequence__c,\n\t\tQualified_Out_Reason__c = Contact.Qualified_Out_Reason__c,\n\t\tRecordTypeId = Contact.RecordTypeId,\n\t\tSAG_Organization__c = Contact.SAG_Organization__c,\n\t\tSAG_UserGroup__c = Contact.SAG_UserGroup__c,\n\t\tSales_Region_Account__c = Contact.Sales_Region_Account__c,\n\t\tSales_Sub_Region_Account__c = Contact.Sales_Sub_Region_Account__c,\n\t\tStatus__c = Contact.Status__c,\n\t\tTitle = Contact.Title,\n\t\taccountBuyingStage6sense_INT__c = Contact.accountBuyingStage6sense_INT__c,\n\t\taccountBuyingStage6sense_IoT__c = Contact.accountBuyingStage6sense_IoT__c,\n\t\taccountIntentScore6sense_INT__c = Contact.accountIntentScore6sense_INT__c,\n\t\taccountIntentScore6sense_IoT__c = Contact.accountIntentScore6sense_IoT__c,\n\t\taccountProfileFit6sense_INT__c = Contact.accountProfileFit6sense_INT__c,\n\t\tbizible2__Ad_Campaign_Name_FT__c = Contact.bizible2__Ad_Campaign_Name_FT__c,\n\t\tbizible2__Ad_Campaign_Name_LC__c = Contact.bizible2__Ad_Campaign_Name_LC__c,\n\t\tbizible2__BizibleId__c = Contact.bizible2__BizibleId__c,\n\t\tbizible2__Landing_Page_FT__c = Contact.bizible2__Landing_Page_FT__c,\n\t\tbizible2__Landing_Page_LC__c = Contact.bizible2__Landing_Page_LC__c,\n\t\tbizible2__Marketing_Channel_FT__c = Contact.bizible2__Marketing_Channel_FT__c,\n\t\tbizible2__Marketing_Channel_LC__c = Contact.bizible2__Marketing_Channel_LC__c,\n\t\tbizible2__Touchpoint_Date_FT__c = Contact.bizible2__Touchpoint_Date_FT__c,\n\t\tbizible2__Touchpoint_Date_LC__c = Contact.bizible2__Touchpoint_Date_LC__c,\n\t\tbizible2__Touchpoint_Source_FT__c = Contact.bizible2__Touchpoint_Source_FT__c,\n\t\tbizible2__Touchpoint_Source_LC__c = Contact.bizible2__Touchpoint_Source_LC__c,\n\t\tcontactGrade6sense_INT__c = Contact.contactGrade6sense_INT__c,\n\t\tcontactGrade_IoT__c = Contact.contactGrade_IoT__c,\n\t\tcontactIntentScore6sense_INT__c = Contact.contactIntentScore6sense_INT__c,\n\t\tcontactIntentScore6sense_IoT__c = Contact.contactIntentScore6sense_IoT__c,\n\t\tcontactProfileFit6sense_INT__c = Contact.contactProfileFit6sense_INT__c,\n\t\tcontactProfileFit6sense_IoT__c = Contact.contactProfileFit6sense_IoT__c,\n\t\tmkto71_Lead_Score__c = Contact.mkto71_Lead_Score__c,\n\t\tIngestionDate\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> JsonToTabularFormat\nJsonToTabularFormat filter(not(isNull(Id))) ~> RemoveNullValuesFromId\nRemoveNullValuesFromId derive(IngestionDate = toDate(split(split(IngestionDate, '/')[6],'_')[1]),\n\t\tCreatedDate = toDate(CreatedDate),\n\t\tLastModifiedDate = toDate(LastModifiedDate),\n\t\tMQL_Date__c = toDate(MQL_Date__c),\n\t\tMost_Recent_Campaign_Date__c = toDate(Most_Recent_Campaign_Date__c),\n\t\tMost_Recent_MQL_Date__c = toDate(Most_Recent_MQL_Date__c),\n\t\tbizible2__Touchpoint_Date_FT__c = toDate(bizible2__Touchpoint_Date_FT__c),\n\t\tbizible2__Touchpoint_Date_LC__c = toDate(bizible2__Touchpoint_Date_LC__c)) ~> ConvertDatesFromStringToDate\nConvertDatesFromStringToDate sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> StoreToDatabase"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/IngestSalesforceContactToStagingInInitialLoad')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Salesforce"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "SalesforceContactFromBlob",
+								"type": "DatasetReference"
+							},
+							"name": "SalesforceContactsFromBlob"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "StgSfContactToStagingIn",
+								"type": "DatasetReference"
+							},
+							"name": "StoreToDatabase"
+						}
+					],
+					"transformations": [
+						{
+							"name": "JsonToTabularFormat"
+						},
+						{
+							"name": "RemoveNullValuesFromId"
+						},
+						{
+							"name": "ConvertDatesFromStringToDate"
+						}
+					],
+					"script": "source(output(\n\t\tContact as ({@xsi:type} as string, ARIS_Trial_Logins_Contact__c as string, AccountId as string, Account_Country__c as string, Activity_after_MQL__c as boolean, Address_Visit_Country__c as string, Asset__c as string, Behavior_Score__c as double, Contact_DepartmentType__c as string, Contact_ID_with_18_Char__c as string, Contact_Type__c as string, CreatedDate as string, CurrencyIsoCode as string, Current_MQL_ID__c as string, DNBoptimizer__DnBContactRecord__c as string, Demographic_Score__c as double, Id as string, Industry_SDR_filter_use__c as string, Job_Title_Standardized__c as string, KeyWords__c as string, LastActivityDate as date, LastModifiedDate as string, Lead_BU_Playbook__c as string, MQL_Date__c as string, Marketing_Status__c as string, Marketo_Do_Not_Sync__c as boolean, Most_Recent_Campaign_Date__c as string, Most_Recent_Campaign_Sales_Playbook__c as string, Most_Recent_Campaign_Status__c as string, Most_Recent_Campaign__c as string, Most_Recent_MQL_Date__c as string, Outreach_Actively_Being_Sequenced__c as boolean, Outreach_Date_Added_to_Sequence__c as date, Qualified_Out_Reason__c as string, RecordTypeId as string, SAG_Organization__c as string, SAG_UserGroup__c as string, Sales_Region_Account__c as string, Sales_Sub_Region_Account__c as string, Status__c as string, Title as string, accountBuyingStage6sense_INT__c as string, accountBuyingStage6sense_IoT__c as string, accountIntentScore6sense_INT__c as string, accountIntentScore6sense_IoT__c as string, accountProfileFit6sense_INT__c as string, bizible2__Ad_Campaign_Name_FT__c as string, bizible2__Ad_Campaign_Name_LC__c as string, bizible2__BizibleId__c as string, bizible2__Landing_Page_FT__c as string, bizible2__Landing_Page_LC__c as string, bizible2__Marketing_Channel_FT__c as string, bizible2__Marketing_Channel_LC__c as string, bizible2__Touchpoint_Date_FT__c as string, bizible2__Touchpoint_Date_LC__c as string, bizible2__Touchpoint_Source_FT__c as string, bizible2__Touchpoint_Source_LC__c as string, contactGrade6sense_INT__c as string, contactGrade_IoT__c as string, contactIntentScore6sense_INT__c as string, contactIntentScore6sense_IoT__c as double, contactProfileFit6sense_INT__c as string, contactProfileFit6sense_IoT__c as string, {ens:type} as string, mkto71_Lead_Score__c as double)[]\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'IngestionDate',\n\tdocumentForm: 'documentPerLine',\n\twildcardPaths:['Salesforce/Contact/*/*/*.json']) ~> SalesforceContactsFromBlob\nSalesforceContactsFromBlob foldDown(unroll(Contact),\n\tmapColumn(\n\t\tARIS_Trial_Logins_Contact__c = Contact.ARIS_Trial_Logins_Contact__c,\n\t\tAccountId = Contact.AccountId,\n\t\tAccount_Country__c = Contact.Account_Country__c,\n\t\tActivity_after_MQL__c = Contact.Activity_after_MQL__c,\n\t\tAddress_Visit_Country__c = Contact.Address_Visit_Country__c,\n\t\tAsset__c = Contact.Asset__c,\n\t\tBehavior_Score__c = Contact.Behavior_Score__c,\n\t\tContact_DepartmentType__c = Contact.Contact_DepartmentType__c,\n\t\tContact_ID_with_18_Char__c = Contact.Contact_ID_with_18_Char__c,\n\t\tContact_Type__c = Contact.Contact_Type__c,\n\t\tCreatedDate = Contact.CreatedDate,\n\t\tCurrencyIsoCode = Contact.CurrencyIsoCode,\n\t\tCurrent_MQL_ID__c = Contact.Current_MQL_ID__c,\n\t\tDNBoptimizer__DnBContactRecord__c = Contact.DNBoptimizer__DnBContactRecord__c,\n\t\tDemographic_Score__c = Contact.Demographic_Score__c,\n\t\tId = Contact.Id,\n\t\tIndustry_SDR_filter_use__c = Contact.Industry_SDR_filter_use__c,\n\t\tJob_Title_Standardized__c = Contact.Job_Title_Standardized__c,\n\t\tKeyWords__c = Contact.KeyWords__c,\n\t\tLastActivityDate = Contact.LastActivityDate,\n\t\tLastModifiedDate = Contact.LastModifiedDate,\n\t\tLead_BU_Playbook__c = Contact.Lead_BU_Playbook__c,\n\t\tMQL_Date__c = Contact.MQL_Date__c,\n\t\tMarketing_Status__c = Contact.Marketing_Status__c,\n\t\tMarketo_Do_Not_Sync__c = Contact.Marketo_Do_Not_Sync__c,\n\t\tMost_Recent_Campaign_Date__c = Contact.Most_Recent_Campaign_Date__c,\n\t\tMost_Recent_Campaign_Sales_Playbook__c = Contact.Most_Recent_Campaign_Sales_Playbook__c,\n\t\tMost_Recent_Campaign_Status__c = Contact.Most_Recent_Campaign_Status__c,\n\t\tMost_Recent_Campaign__c = Contact.Most_Recent_Campaign__c,\n\t\tMost_Recent_MQL_Date__c = Contact.Most_Recent_MQL_Date__c,\n\t\tOutreach_Actively_Being_Sequenced__c = Contact.Outreach_Actively_Being_Sequenced__c,\n\t\tOutreach_Date_Added_to_Sequence__c = Contact.Outreach_Date_Added_to_Sequence__c,\n\t\tQualified_Out_Reason__c = Contact.Qualified_Out_Reason__c,\n\t\tRecordTypeId = Contact.RecordTypeId,\n\t\tSAG_Organization__c = Contact.SAG_Organization__c,\n\t\tSAG_UserGroup__c = Contact.SAG_UserGroup__c,\n\t\tSales_Region_Account__c = Contact.Sales_Region_Account__c,\n\t\tSales_Sub_Region_Account__c = Contact.Sales_Sub_Region_Account__c,\n\t\tStatus__c = Contact.Status__c,\n\t\tTitle = Contact.Title,\n\t\taccountBuyingStage6sense_INT__c = Contact.accountBuyingStage6sense_INT__c,\n\t\taccountBuyingStage6sense_IoT__c = Contact.accountBuyingStage6sense_IoT__c,\n\t\taccountIntentScore6sense_INT__c = Contact.accountIntentScore6sense_INT__c,\n\t\taccountIntentScore6sense_IoT__c = Contact.accountIntentScore6sense_IoT__c,\n\t\taccountProfileFit6sense_INT__c = Contact.accountProfileFit6sense_INT__c,\n\t\tbizible2__Ad_Campaign_Name_FT__c = Contact.bizible2__Ad_Campaign_Name_FT__c,\n\t\tbizible2__Ad_Campaign_Name_LC__c = Contact.bizible2__Ad_Campaign_Name_LC__c,\n\t\tbizible2__BizibleId__c = Contact.bizible2__BizibleId__c,\n\t\tbizible2__Landing_Page_FT__c = Contact.bizible2__Landing_Page_FT__c,\n\t\tbizible2__Landing_Page_LC__c = Contact.bizible2__Landing_Page_LC__c,\n\t\tbizible2__Marketing_Channel_FT__c = Contact.bizible2__Marketing_Channel_FT__c,\n\t\tbizible2__Marketing_Channel_LC__c = Contact.bizible2__Marketing_Channel_LC__c,\n\t\tbizible2__Touchpoint_Date_FT__c = Contact.bizible2__Touchpoint_Date_FT__c,\n\t\tbizible2__Touchpoint_Date_LC__c = Contact.bizible2__Touchpoint_Date_LC__c,\n\t\tbizible2__Touchpoint_Source_FT__c = Contact.bizible2__Touchpoint_Source_FT__c,\n\t\tbizible2__Touchpoint_Source_LC__c = Contact.bizible2__Touchpoint_Source_LC__c,\n\t\tcontactGrade6sense_INT__c = Contact.contactGrade6sense_INT__c,\n\t\tcontactGrade_IoT__c = Contact.contactGrade_IoT__c,\n\t\tcontactIntentScore6sense_INT__c = Contact.contactIntentScore6sense_INT__c,\n\t\tcontactIntentScore6sense_IoT__c = Contact.contactIntentScore6sense_IoT__c,\n\t\tcontactProfileFit6sense_INT__c = Contact.contactProfileFit6sense_INT__c,\n\t\tcontactProfileFit6sense_IoT__c = Contact.contactProfileFit6sense_IoT__c,\n\t\tmkto71_Lead_Score__c = Contact.mkto71_Lead_Score__c,\n\t\tIngestionDate\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> JsonToTabularFormat\nJsonToTabularFormat filter(not(isNull(Id))) ~> RemoveNullValuesFromId\nRemoveNullValuesFromId derive(IngestionDate = toDate(split(split(IngestionDate, '/')[6],'_')[1]),\n\t\tCreatedDate = toDate(CreatedDate),\n\t\tLastModifiedDate = toDate(LastModifiedDate),\n\t\tMQL_Date__c = toDate(MQL_Date__c),\n\t\tMost_Recent_Campaign_Date__c = toDate(Most_Recent_Campaign_Date__c),\n\t\tMost_Recent_MQL_Date__c = toDate(Most_Recent_MQL_Date__c),\n\t\tbizible2__Touchpoint_Date_FT__c = toDate(bizible2__Touchpoint_Date_FT__c),\n\t\tbizible2__Touchpoint_Date_LC__c = toDate(bizible2__Touchpoint_Date_LC__c)) ~> ConvertDatesFromStringToDate\nConvertDatesFromStringToDate sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> StoreToDatabase"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/IngestSalesforceLeadsToStagingInDaily')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Salesforce"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "SalesforceLeadFromBlob",
+								"type": "DatasetReference"
+							},
+							"name": "SalesforceLeadsFromBlob"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "StgSfLeadToStagingIn",
+								"type": "DatasetReference"
+							},
+							"name": "StoreToDatabase"
+						}
+					],
+					"transformations": [
+						{
+							"name": "JsonToTabularFormat"
+						},
+						{
+							"name": "RemoveNullValuesFromId"
+						},
+						{
+							"name": "ConvertDatesFromStringToDate"
+						}
+					],
+					"script": "source(output(\n\t\tLead as ({@xsi:type} as string, ARIS_Trial_Logins_Lead__c as string, Account_AnnualRevRange_LocalCurr__c as string, Account_EmployeesRange__c as string, Account_Owner_Role__c as string, Activity_after_MQL__c as boolean, Address_Visit_Country__c as string, Age_LastActivity__c as double, Age_LastModified__c as double, Annual_Revenue_Range__c as string, Asset__c as string, Behavior_Score__c as double, Classification_SolutionType__c as string, Cluster__c as string, Company as string, Contact_DepartmentType__c as string, ConvertedAccountId as string, ConvertedContactId as string, ConvertedDate as date, ConvertedOpportunityId as string, Country as string, CreatedById as string, CreatedDate as string, CurrencyIsoCode as string, Current_MQL_ID__c as string, Customer_Segmentation__c as string, DNBoptimizer__DNB_D_U_N_S_Number__c as integer, DNBoptimizer__DnBCompanyRecord__c as string, DNBoptimizer__DnBContactRecord__c as string, DUNS_Number__c as string, Demographic_Score__c as double, Division__c as string, Domestic_Ultimate_DUNS_Number__c as integer, Id as string, Incremental__c as boolean, Industry as string, Industry_Sub__c as string, Job_Title_Standardized__c as string, KeyWords__c as string, LastActivityDate as date, LastModifiedDate as string, LastTransferDate as date, Lead_BU_Playbook__c as string, Link_Account__c as string, MQL_Date__c as string, Marketo_Do_Not_Sync__c as boolean, MasterRecordId as string, Most_Recent_Campaign_Date__c as string, Most_Recent_Campaign_Sales_Playbook__c as string, Most_Recent_Campaign_Status__c as string, Most_Recent_Campaign__c as string, Most_Recent_MQL_Date__c as string, Most_Recent_Sales_Play_Campaign__c as string, NumberOfEmployees as integer, Opportunity_Name__c as string, Outreach_Actively_being_sequenced__c as boolean, Outreach_Date_Added_to_Sequence__c as date, Outreach_Finished_Sequences__c as string, Outreach_Number_of_Active_Sequences__c as short, Outreach_Number_of_Active_Tasks__c as double, OwnerId as string, Partner_Involved__c as boolean, Partner_Lead__c as boolean, Qualification_Date_FirstContact__c as date, Qualification_DisregardedReason__c as string, RecordTypeId as string, SAG_Organization__c as string, SAG_User_Groups__c as string, Sales_Region__c as string, Sales_Sub_Region__c as string, State as string, Status as string, Title as string, Top_Account__c as boolean, Workspan_ID__c as string, Workspan_URL__c as string, accountBuyingStage6sense_INT__c as string, accountBuyingStage6sense_IoT__c as string, accountIntentScore6sense_INT__c as double, accountIntentScore6sense_IoT__c as double, accountProfileFit6sense_INT__c as string, accountProfileFit6sense_IoT__c as string, bizible2__Account__c as string, bizible2__Ad_Campaign_Name_FT__c as string, bizible2__Ad_Campaign_Name_LC__c as string, bizible2__BizibleId__c as string, bizible2__Landing_Page_FT__c as string, bizible2__Landing_Page_LC__c as string, bizible2__Marketing_Channel_FT__c as string, bizible2__Marketing_Channel_LC__c as string, bizible2__Touchpoint_Date_FT__c as string, bizible2__Touchpoint_Date_LC__c as string, bizible2__Touchpoint_Source_FT__c as string, bizible2__Touchpoint_Source_LC__c as string, contactGrade6sense_INT__c as string, contactGrade_IoT__c as string, contactIntentScore6sense_INT__c as double, contactIntentScore6sense_IoT__c as double, contactProfileFit6sense_INT__c as string, contactProfileFit6sense_IoT__c as string, {ens:type} as string, mkto71_Lead_Score__c as double)[]\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'IngestionDate',\n\tdocumentForm: 'documentPerLine') ~> SalesforceLeadsFromBlob\nSalesforceLeadsFromBlob foldDown(unroll(Lead),\n\tmapColumn(\n\t\tARIS_Trial_Logins_Lead__c = Lead.ARIS_Trial_Logins_Lead__c,\n\t\tAccount_AnnualRevRange_LocalCurr__c = Lead.Account_AnnualRevRange_LocalCurr__c,\n\t\tAccount_EmployeesRange__c = Lead.Account_EmployeesRange__c,\n\t\tAccount_Owner_Role__c = Lead.Account_Owner_Role__c,\n\t\tActivity_after_MQL__c = Lead.Activity_after_MQL__c,\n\t\tAddress_Visit_Country__c = Lead.Address_Visit_Country__c,\n\t\tAge_LastActivity__c = Lead.Age_LastActivity__c,\n\t\tAge_LastModified__c = Lead.Age_LastModified__c,\n\t\tAnnual_Revenue_Range__c = Lead.Annual_Revenue_Range__c,\n\t\tAsset__c = Lead.Asset__c,\n\t\tBehavior_Score__c = Lead.Behavior_Score__c,\n\t\tClassification_SolutionType__c = Lead.Classification_SolutionType__c,\n\t\tCluster__c = Lead.Cluster__c,\n\t\tCompany = Lead.Company,\n\t\tContact_DepartmentType__c = Lead.Contact_DepartmentType__c,\n\t\tConvertedAccountId = Lead.ConvertedAccountId,\n\t\tConvertedContactId = Lead.ConvertedContactId,\n\t\tConvertedDate = Lead.ConvertedDate,\n\t\tConvertedOpportunityId = Lead.ConvertedOpportunityId,\n\t\tCountry = Lead.Country,\n\t\tCreatedById = Lead.CreatedById,\n\t\tCreatedDate = Lead.CreatedDate,\n\t\tCurrencyIsoCode = Lead.CurrencyIsoCode,\n\t\tCurrent_MQL_ID__c = Lead.Current_MQL_ID__c,\n\t\tCustomer_Segmentation__c = Lead.Customer_Segmentation__c,\n\t\tDNBoptimizer__DNB_D_U_N_S_Number__c = Lead.DNBoptimizer__DNB_D_U_N_S_Number__c,\n\t\tDNBoptimizer__DnBCompanyRecord__c = Lead.DNBoptimizer__DnBCompanyRecord__c,\n\t\tDNBoptimizer__DnBContactRecord__c = Lead.DNBoptimizer__DnBContactRecord__c,\n\t\tDUNS_Number__c = Lead.DUNS_Number__c,\n\t\tDemographic_Score__c = Lead.Demographic_Score__c,\n\t\tDivision__c = Lead.Division__c,\n\t\tDomestic_Ultimate_DUNS_Number__c = Lead.Domestic_Ultimate_DUNS_Number__c,\n\t\tId = Lead.Id,\n\t\tIncremental__c = Lead.Incremental__c,\n\t\tIndustry = Lead.Industry,\n\t\tIndustry_Sub__c = Lead.Industry_Sub__c,\n\t\tJob_Title_Standardized__c = Lead.Job_Title_Standardized__c,\n\t\tKeyWords__c = Lead.KeyWords__c,\n\t\tLastActivityDate = Lead.LastActivityDate,\n\t\tLastModifiedDate = Lead.LastModifiedDate,\n\t\tLastTransferDate = Lead.LastTransferDate,\n\t\tLead_BU_Playbook__c = Lead.Lead_BU_Playbook__c,\n\t\tLink_Account__c = Lead.Link_Account__c,\n\t\tMQL_Date__c = Lead.MQL_Date__c,\n\t\tMarketo_Do_Not_Sync__c = Lead.Marketo_Do_Not_Sync__c,\n\t\tMasterRecordId = Lead.MasterRecordId,\n\t\tMost_Recent_Campaign_Date__c = Lead.Most_Recent_Campaign_Date__c,\n\t\tMost_Recent_Campaign_Sales_Playbook__c = Lead.Most_Recent_Campaign_Sales_Playbook__c,\n\t\tMost_Recent_Campaign_Status__c = Lead.Most_Recent_Campaign_Status__c,\n\t\tMost_Recent_Campaign__c = Lead.Most_Recent_Campaign__c,\n\t\tMost_Recent_MQL_Date__c = Lead.Most_Recent_MQL_Date__c,\n\t\tMost_Recent_Sales_Play_Campaign__c = Lead.Most_Recent_Sales_Play_Campaign__c,\n\t\tNumberOfEmployees = Lead.NumberOfEmployees,\n\t\tOpportunity_Name__c = Lead.Opportunity_Name__c,\n\t\tOutreach_Actively_being_sequenced__c = Lead.Outreach_Actively_being_sequenced__c,\n\t\tOutreach_Date_Added_to_Sequence__c = Lead.Outreach_Date_Added_to_Sequence__c,\n\t\tOutreach_Finished_Sequences__c = Lead.Outreach_Finished_Sequences__c,\n\t\tOutreach_Number_of_Active_Sequences__c = Lead.Outreach_Number_of_Active_Sequences__c,\n\t\tOutreach_Number_of_Active_Tasks__c = Lead.Outreach_Number_of_Active_Tasks__c,\n\t\tOwnerId = Lead.OwnerId,\n\t\tPartner_Involved__c = Lead.Partner_Involved__c,\n\t\tPartner_Lead__c = Lead.Partner_Lead__c,\n\t\tQualification_Date_FirstContact__c = Lead.Qualification_Date_FirstContact__c,\n\t\tQualification_DisregardedReason__c = Lead.Qualification_DisregardedReason__c,\n\t\tRecordTypeId = Lead.RecordTypeId,\n\t\tSAG_Organization__c = Lead.SAG_Organization__c,\n\t\tSAG_User_Groups__c = Lead.SAG_User_Groups__c,\n\t\tSales_Region__c = Lead.Sales_Region__c,\n\t\tSales_Sub_Region__c = Lead.Sales_Sub_Region__c,\n\t\tState = Lead.State,\n\t\tStatus = Lead.Status,\n\t\tTitle = Lead.Title,\n\t\tTop_Account__c = Lead.Top_Account__c,\n\t\tWorkspan_ID__c = Lead.Workspan_ID__c,\n\t\tWorkspan_URL__c = Lead.Workspan_URL__c,\n\t\taccountBuyingStage6sense_INT__c = Lead.accountBuyingStage6sense_INT__c,\n\t\taccountBuyingStage6sense_IoT__c = Lead.accountBuyingStage6sense_IoT__c,\n\t\taccountIntentScore6sense_INT__c = Lead.accountIntentScore6sense_INT__c,\n\t\taccountIntentScore6sense_IoT__c = Lead.accountIntentScore6sense_IoT__c,\n\t\taccountProfileFit6sense_INT__c = Lead.accountProfileFit6sense_INT__c,\n\t\taccountProfileFit6sense_IoT__c = Lead.accountProfileFit6sense_IoT__c,\n\t\tbizible2__Account__c = Lead.bizible2__Account__c,\n\t\tbizible2__Ad_Campaign_Name_FT__c = Lead.bizible2__Ad_Campaign_Name_FT__c,\n\t\tbizible2__Ad_Campaign_Name_LC__c = Lead.bizible2__Ad_Campaign_Name_LC__c,\n\t\tbizible2__BizibleId__c = Lead.bizible2__BizibleId__c,\n\t\tbizible2__Landing_Page_FT__c = Lead.bizible2__Landing_Page_FT__c,\n\t\tbizible2__Landing_Page_LC__c = Lead.bizible2__Landing_Page_LC__c,\n\t\tbizible2__Marketing_Channel_FT__c = Lead.bizible2__Marketing_Channel_FT__c,\n\t\tbizible2__Marketing_Channel_LC__c = Lead.bizible2__Marketing_Channel_LC__c,\n\t\tbizible2__Touchpoint_Date_FT__c = Lead.bizible2__Touchpoint_Date_FT__c,\n\t\tbizible2__Touchpoint_Date_LC__c = Lead.bizible2__Touchpoint_Date_LC__c,\n\t\tbizible2__Touchpoint_Source_FT__c = Lead.bizible2__Touchpoint_Source_FT__c,\n\t\tbizible2__Touchpoint_Source_LC__c = Lead.bizible2__Touchpoint_Source_LC__c,\n\t\tcontactGrade6sense_INT__c = Lead.contactGrade6sense_INT__c,\n\t\tcontactGrade_IoT__c = Lead.contactGrade_IoT__c,\n\t\tcontactIntentScore6sense_INT__c = Lead.contactIntentScore6sense_INT__c,\n\t\tcontactIntentScore6sense_IoT__c = Lead.contactIntentScore6sense_IoT__c,\n\t\tcontactProfileFit6sense_INT__c = Lead.contactProfileFit6sense_INT__c,\n\t\tcontactProfileFit6sense_IoT__c = Lead.contactProfileFit6sense_IoT__c,\n\t\tmkto71_Lead_Score__c = Lead.mkto71_Lead_Score__c,\n\t\tIngestionDate\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> JsonToTabularFormat\nJsonToTabularFormat filter(not(isNull(Id))) ~> RemoveNullValuesFromId\nRemoveNullValuesFromId derive(IngestionDate = toDate(split(split(IngestionDate, '/')[6],'_')[1]),\n\t\tCreatedDate = toDate(CreatedDate),\n\t\tLastModifiedDate = toDate(LastModifiedDate),\n\t\tMQL_Date__c = toDate(MQL_Date__c),\n\t\tMost_Recent_Campaign_Date__c = toDate(Most_Recent_Campaign_Date__c),\n\t\tMost_Recent_MQL_Date__c = toDate(Most_Recent_MQL_Date__c),\n\t\tbizible2__Touchpoint_Date_FT__c = toDate(bizible2__Touchpoint_Date_FT__c),\n\t\tbizible2__Touchpoint_Date_LC__c = toDate(bizible2__Touchpoint_Date_LC__c)) ~> ConvertDatesFromStringToDate\nConvertDatesFromStringToDate sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> StoreToDatabase"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/IngestSalesforceLeadsToStagingInInitialLoad')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Salesforce"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "SalesforceLeadFromBlob",
+								"type": "DatasetReference"
+							},
+							"name": "SalesforceLeadsFromBlob"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "StgSfLeadToStagingIn",
+								"type": "DatasetReference"
+							},
+							"name": "StoreToDatabase"
+						}
+					],
+					"transformations": [
+						{
+							"name": "JsonToTabularFormat"
+						},
+						{
+							"name": "RemoveNullValuesFromId"
+						},
+						{
+							"name": "ConvertDatesFromStringToDate"
+						}
+					],
+					"script": "source(output(\n\t\tLead as ({@xsi:type} as string, ARIS_Trial_Logins_Lead__c as string, Account_AnnualRevRange_LocalCurr__c as string, Account_EmployeesRange__c as string, Account_Owner_Role__c as string, Activity_after_MQL__c as boolean, Address_Visit_Country__c as string, Age_LastActivity__c as double, Age_LastModified__c as double, Annual_Revenue_Range__c as string, Asset__c as string, Behavior_Score__c as double, Classification_SolutionType__c as string, Cluster__c as string, Company as string, Contact_DepartmentType__c as string, ConvertedAccountId as string, ConvertedContactId as string, ConvertedDate as date, ConvertedOpportunityId as string, Country as string, CreatedById as string, CreatedDate as string, CurrencyIsoCode as string, Current_MQL_ID__c as string, Customer_Segmentation__c as string, DNBoptimizer__DNB_D_U_N_S_Number__c as integer, DNBoptimizer__DnBCompanyRecord__c as string, DNBoptimizer__DnBContactRecord__c as string, DUNS_Number__c as string, Demographic_Score__c as double, Division__c as string, Domestic_Ultimate_DUNS_Number__c as integer, Id as string, Incremental__c as boolean, Industry as string, Industry_Sub__c as string, Job_Title_Standardized__c as string, KeyWords__c as string, LastActivityDate as date, LastModifiedDate as string, LastTransferDate as date, Lead_BU_Playbook__c as string, Link_Account__c as string, MQL_Date__c as string, Marketo_Do_Not_Sync__c as boolean, MasterRecordId as string, Most_Recent_Campaign_Date__c as string, Most_Recent_Campaign_Sales_Playbook__c as string, Most_Recent_Campaign_Status__c as string, Most_Recent_Campaign__c as string, Most_Recent_MQL_Date__c as string, Most_Recent_Sales_Play_Campaign__c as string, NumberOfEmployees as integer, Opportunity_Name__c as string, Outreach_Actively_being_sequenced__c as boolean, Outreach_Date_Added_to_Sequence__c as date, Outreach_Finished_Sequences__c as string, Outreach_Number_of_Active_Sequences__c as short, Outreach_Number_of_Active_Tasks__c as double, OwnerId as string, Partner_Involved__c as boolean, Partner_Lead__c as boolean, Qualification_Date_FirstContact__c as date, Qualification_DisregardedReason__c as string, RecordTypeId as string, SAG_Organization__c as string, SAG_User_Groups__c as string, Sales_Region__c as string, Sales_Sub_Region__c as string, State as string, Status as string, Title as string, Top_Account__c as boolean, Workspan_ID__c as string, Workspan_URL__c as string, accountBuyingStage6sense_INT__c as string, accountBuyingStage6sense_IoT__c as string, accountIntentScore6sense_INT__c as double, accountIntentScore6sense_IoT__c as double, accountProfileFit6sense_INT__c as string, accountProfileFit6sense_IoT__c as string, bizible2__Account__c as string, bizible2__Ad_Campaign_Name_FT__c as string, bizible2__Ad_Campaign_Name_LC__c as string, bizible2__BizibleId__c as string, bizible2__Landing_Page_FT__c as string, bizible2__Landing_Page_LC__c as string, bizible2__Marketing_Channel_FT__c as string, bizible2__Marketing_Channel_LC__c as string, bizible2__Touchpoint_Date_FT__c as string, bizible2__Touchpoint_Date_LC__c as string, bizible2__Touchpoint_Source_FT__c as string, bizible2__Touchpoint_Source_LC__c as string, contactGrade6sense_INT__c as string, contactGrade_IoT__c as string, contactIntentScore6sense_INT__c as double, contactIntentScore6sense_IoT__c as double, contactProfileFit6sense_INT__c as string, contactProfileFit6sense_IoT__c as string, {ens:type} as string, mkto71_Lead_Score__c as double)[]\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'IngestionDate',\n\tdocumentForm: 'documentPerLine',\n\twildcardPaths:['Salesforce/Lead/2022/03/*.json']) ~> SalesforceLeadsFromBlob\nSalesforceLeadsFromBlob foldDown(unroll(Lead),\n\tmapColumn(\n\t\tARIS_Trial_Logins_Lead__c = Lead.ARIS_Trial_Logins_Lead__c,\n\t\tAccount_AnnualRevRange_LocalCurr__c = Lead.Account_AnnualRevRange_LocalCurr__c,\n\t\tAccount_EmployeesRange__c = Lead.Account_EmployeesRange__c,\n\t\tAccount_Owner_Role__c = Lead.Account_Owner_Role__c,\n\t\tActivity_after_MQL__c = Lead.Activity_after_MQL__c,\n\t\tAddress_Visit_Country__c = Lead.Address_Visit_Country__c,\n\t\tAge_LastActivity__c = Lead.Age_LastActivity__c,\n\t\tAge_LastModified__c = Lead.Age_LastModified__c,\n\t\tAnnual_Revenue_Range__c = Lead.Annual_Revenue_Range__c,\n\t\tAsset__c = Lead.Asset__c,\n\t\tBehavior_Score__c = Lead.Behavior_Score__c,\n\t\tClassification_SolutionType__c = Lead.Classification_SolutionType__c,\n\t\tCluster__c = Lead.Cluster__c,\n\t\tCompany = Lead.Company,\n\t\tContact_DepartmentType__c = Lead.Contact_DepartmentType__c,\n\t\tConvertedAccountId = Lead.ConvertedAccountId,\n\t\tConvertedContactId = Lead.ConvertedContactId,\n\t\tConvertedDate = Lead.ConvertedDate,\n\t\tConvertedOpportunityId = Lead.ConvertedOpportunityId,\n\t\tCountry = Lead.Country,\n\t\tCreatedById = Lead.CreatedById,\n\t\tCreatedDate = Lead.CreatedDate,\n\t\tCurrencyIsoCode = Lead.CurrencyIsoCode,\n\t\tCurrent_MQL_ID__c = Lead.Current_MQL_ID__c,\n\t\tCustomer_Segmentation__c = Lead.Customer_Segmentation__c,\n\t\tDNBoptimizer__DNB_D_U_N_S_Number__c = Lead.DNBoptimizer__DNB_D_U_N_S_Number__c,\n\t\tDNBoptimizer__DnBCompanyRecord__c = Lead.DNBoptimizer__DnBCompanyRecord__c,\n\t\tDNBoptimizer__DnBContactRecord__c = Lead.DNBoptimizer__DnBContactRecord__c,\n\t\tDUNS_Number__c = Lead.DUNS_Number__c,\n\t\tDemographic_Score__c = Lead.Demographic_Score__c,\n\t\tDivision__c = Lead.Division__c,\n\t\tDomestic_Ultimate_DUNS_Number__c = Lead.Domestic_Ultimate_DUNS_Number__c,\n\t\tId = Lead.Id,\n\t\tIncremental__c = Lead.Incremental__c,\n\t\tIndustry = Lead.Industry,\n\t\tIndustry_Sub__c = Lead.Industry_Sub__c,\n\t\tJob_Title_Standardized__c = Lead.Job_Title_Standardized__c,\n\t\tKeyWords__c = Lead.KeyWords__c,\n\t\tLastActivityDate = Lead.LastActivityDate,\n\t\tLastModifiedDate = Lead.LastModifiedDate,\n\t\tLastTransferDate = Lead.LastTransferDate,\n\t\tLead_BU_Playbook__c = Lead.Lead_BU_Playbook__c,\n\t\tLink_Account__c = Lead.Link_Account__c,\n\t\tMQL_Date__c = Lead.MQL_Date__c,\n\t\tMarketo_Do_Not_Sync__c = Lead.Marketo_Do_Not_Sync__c,\n\t\tMasterRecordId = Lead.MasterRecordId,\n\t\tMost_Recent_Campaign_Date__c = Lead.Most_Recent_Campaign_Date__c,\n\t\tMost_Recent_Campaign_Sales_Playbook__c = Lead.Most_Recent_Campaign_Sales_Playbook__c,\n\t\tMost_Recent_Campaign_Status__c = Lead.Most_Recent_Campaign_Status__c,\n\t\tMost_Recent_Campaign__c = Lead.Most_Recent_Campaign__c,\n\t\tMost_Recent_MQL_Date__c = Lead.Most_Recent_MQL_Date__c,\n\t\tMost_Recent_Sales_Play_Campaign__c = Lead.Most_Recent_Sales_Play_Campaign__c,\n\t\tNumberOfEmployees = Lead.NumberOfEmployees,\n\t\tOpportunity_Name__c = Lead.Opportunity_Name__c,\n\t\tOutreach_Actively_being_sequenced__c = Lead.Outreach_Actively_being_sequenced__c,\n\t\tOutreach_Date_Added_to_Sequence__c = Lead.Outreach_Date_Added_to_Sequence__c,\n\t\tOutreach_Finished_Sequences__c = Lead.Outreach_Finished_Sequences__c,\n\t\tOutreach_Number_of_Active_Sequences__c = Lead.Outreach_Number_of_Active_Sequences__c,\n\t\tOutreach_Number_of_Active_Tasks__c = Lead.Outreach_Number_of_Active_Tasks__c,\n\t\tOwnerId = Lead.OwnerId,\n\t\tPartner_Involved__c = Lead.Partner_Involved__c,\n\t\tPartner_Lead__c = Lead.Partner_Lead__c,\n\t\tQualification_Date_FirstContact__c = Lead.Qualification_Date_FirstContact__c,\n\t\tQualification_DisregardedReason__c = Lead.Qualification_DisregardedReason__c,\n\t\tRecordTypeId = Lead.RecordTypeId,\n\t\tSAG_Organization__c = Lead.SAG_Organization__c,\n\t\tSAG_User_Groups__c = Lead.SAG_User_Groups__c,\n\t\tSales_Region__c = Lead.Sales_Region__c,\n\t\tSales_Sub_Region__c = Lead.Sales_Sub_Region__c,\n\t\tState = Lead.State,\n\t\tStatus = Lead.Status,\n\t\tTitle = Lead.Title,\n\t\tTop_Account__c = Lead.Top_Account__c,\n\t\tWorkspan_ID__c = Lead.Workspan_ID__c,\n\t\tWorkspan_URL__c = Lead.Workspan_URL__c,\n\t\taccountBuyingStage6sense_INT__c = Lead.accountBuyingStage6sense_INT__c,\n\t\taccountBuyingStage6sense_IoT__c = Lead.accountBuyingStage6sense_IoT__c,\n\t\taccountIntentScore6sense_INT__c = Lead.accountIntentScore6sense_INT__c,\n\t\taccountIntentScore6sense_IoT__c = Lead.accountIntentScore6sense_IoT__c,\n\t\taccountProfileFit6sense_INT__c = Lead.accountProfileFit6sense_INT__c,\n\t\taccountProfileFit6sense_IoT__c = Lead.accountProfileFit6sense_IoT__c,\n\t\tbizible2__Account__c = Lead.bizible2__Account__c,\n\t\tbizible2__Ad_Campaign_Name_FT__c = Lead.bizible2__Ad_Campaign_Name_FT__c,\n\t\tbizible2__Ad_Campaign_Name_LC__c = Lead.bizible2__Ad_Campaign_Name_LC__c,\n\t\tbizible2__BizibleId__c = Lead.bizible2__BizibleId__c,\n\t\tbizible2__Landing_Page_FT__c = Lead.bizible2__Landing_Page_FT__c,\n\t\tbizible2__Landing_Page_LC__c = Lead.bizible2__Landing_Page_LC__c,\n\t\tbizible2__Marketing_Channel_FT__c = Lead.bizible2__Marketing_Channel_FT__c,\n\t\tbizible2__Marketing_Channel_LC__c = Lead.bizible2__Marketing_Channel_LC__c,\n\t\tbizible2__Touchpoint_Date_FT__c = Lead.bizible2__Touchpoint_Date_FT__c,\n\t\tbizible2__Touchpoint_Date_LC__c = Lead.bizible2__Touchpoint_Date_LC__c,\n\t\tbizible2__Touchpoint_Source_FT__c = Lead.bizible2__Touchpoint_Source_FT__c,\n\t\tbizible2__Touchpoint_Source_LC__c = Lead.bizible2__Touchpoint_Source_LC__c,\n\t\tcontactGrade6sense_INT__c = Lead.contactGrade6sense_INT__c,\n\t\tcontactGrade_IoT__c = Lead.contactGrade_IoT__c,\n\t\tcontactIntentScore6sense_INT__c = Lead.contactIntentScore6sense_INT__c,\n\t\tcontactIntentScore6sense_IoT__c = Lead.contactIntentScore6sense_IoT__c,\n\t\tcontactProfileFit6sense_INT__c = Lead.contactProfileFit6sense_INT__c,\n\t\tcontactProfileFit6sense_IoT__c = Lead.contactProfileFit6sense_IoT__c,\n\t\tmkto71_Lead_Score__c = Lead.mkto71_Lead_Score__c,\n\t\tIngestionDate\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> JsonToTabularFormat\nJsonToTabularFormat filter(not(isNull(Id))) ~> RemoveNullValuesFromId\nRemoveNullValuesFromId derive(IngestionDate = toDate(split(split(IngestionDate, '/')[6],'_')[1]),\n\t\tCreatedDate = toDate(CreatedDate),\n\t\tLastModifiedDate = toDate(LastModifiedDate),\n\t\tMQL_Date__c = toDate(MQL_Date__c),\n\t\tMost_Recent_Campaign_Date__c = toDate(Most_Recent_Campaign_Date__c),\n\t\tMost_Recent_MQL_Date__c = toDate(Most_Recent_MQL_Date__c),\n\t\tbizible2__Touchpoint_Date_FT__c = toDate(bizible2__Touchpoint_Date_FT__c),\n\t\tbizible2__Touchpoint_Date_LC__c = toDate(bizible2__Touchpoint_Date_LC__c)) ~> ConvertDatesFromStringToDate\nConvertDatesFromStringToDate sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> StoreToDatabase"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/IngestSalesforceOpportunitiesToStagingInDaily')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Salesforce"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "SalesforceOpportunitiesFromBlob",
+								"type": "DatasetReference"
+							},
+							"name": "SalesforceOpportunitiesFromBlob"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "StgSfOpportunityToStagingIn",
+								"type": "DatasetReference"
+							},
+							"name": "StoreToDatabase"
+						}
+					],
+					"transformations": [
+						{
+							"name": "JsonToTabularFormat"
+						},
+						{
+							"name": "RemoveNullValuesFromId"
+						},
+						{
+							"name": "ConvertIngestionDateFromStringToDate"
+						}
+					],
+					"script": "source(output(\n\t\tOpportunity as ({@xsi:type} as string, ALTF__Altify_Opportunity__c as string, AccountId as string, Age__c as double, Altify_Completeness__c as double, Altify_Opportunity_Plan_Score__c as double, Altify_Plan_Status__c as string, Altify_Reporting_Amount__c as double, Altify_Sales_Process_Status__c as string, Altify_T_I_Status__c as string, Amount as double, Amount_100__c as double, Amount_10__c as double, Amount_30__c as double, Amount_50__c as double, Amount_70__c as double, Amount_90__c as double, Amount_A2_Bookings__c as double, Amount_A_N_Bookings__c as double, Amount_Bookings_Value__c as double, Amount_Bookings__c as double, Amount_DBP_Combined_Bookings__c as double, Amount_Integration_Bookings__c as double, Amount_IoT_Analytics_Bookings__c as double, Amount_TrendMiner_Bookings__c as double, Amount_Value__c as double, Board_Responsible__c as string, CMS_Case_Number__c as double, CMS_Link__c as string, CampaignId as string, Classification_SolutionType__c as string, CloseDate as date, Cluster__c as string, ContactId as string, Count_Opp_Partners__c as double, Count_Primary_Partners__c as double, CreatedById as string, CreatedDate as string, CurrencyIsoCode as string, Date_100__c as date, Date_30__c as date, Date_50__c as date, Date_5__c as date, Date_70__c as date, Date_90__c as date, Deal_Type__c as string, Description as string, Division__c as string, Duration_10_30__c as double, Duration_30_50__c as double, Duration_50_70__c as double, Duration_70_90__c as double, Duration_90_100__c as double, ForecastCategory as string, ForecastCategoryName as string, GDD_Number__c as string, GDD_Version_Number__c as short, Healthiness_Category__c as string, Id as string, Incremental__c as boolean, Industry__c as string, IsClosed as boolean, IsWon as boolean, KeyWords__c as string, LastActivityDate as date, LastModifiedDate as string, LeadSource as string, Name as string, Opportunity_Number__c as integer, Opportunity_Record_Type_Text__c as string, Opportunity_Source__c as string, Outreach_Last_Touch_Contact__c as string, Outreach_Last_Touch_Sequence__c as string, OwnerId as string, Primary_Campaign_Category__c as string, Primary_Contact__c as string, Probability as double, Reason_s_for_competitive_loss__c as string, Reason_s_for_non_competitive_loss__c as string, RecordTypeId as string, Renewal__c as boolean, SAG_Organization_Account__c as string, SAG_Organization__c as string, SQO_Accepted_Date__c as date, SQO_Accepted_Month__c as double, SQO_Age__c as double, Sales_Organization__c as string, Sales_Plays__c as string, Sales_Region__c as string, Sales_Sub_Region__c as string, StageName as string, Type as string, Type_of_Opportunity__c as string, {ens:type} as string)[]\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'IngestionDate',\n\tdocumentForm: 'documentPerLine') ~> SalesforceOpportunitiesFromBlob\nSalesforceOpportunitiesFromBlob foldDown(unroll(Opportunity),\n\tmapColumn(\n\t\tId = Opportunity.Id,\n\t\tAccountId = Opportunity.AccountId,\n\t\tRecordTypeId = Opportunity.RecordTypeId,\n\t\tName = Opportunity.Name,\n\t\tDescription = Opportunity.Description,\n\t\tStageName = Opportunity.StageName,\n\t\tAmount = Opportunity.Amount,\n\t\tProbability = Opportunity.Probability,\n\t\tCloseDate = Opportunity.CloseDate,\n\t\tType = Opportunity.Type,\n\t\tLeadSource = Opportunity.LeadSource,\n\t\tIsClosed = Opportunity.IsClosed,\n\t\tIsWon = Opportunity.IsWon,\n\t\tForecastCategory = Opportunity.ForecastCategory,\n\t\tForecastCategoryName = Opportunity.ForecastCategoryName,\n\t\tCurrencyIsoCode = Opportunity.CurrencyIsoCode,\n\t\tCampaignId = Opportunity.CampaignId,\n\t\tOwnerId = Opportunity.OwnerId,\n\t\tCreatedDate = Opportunity.CreatedDate,\n\t\tCreatedById = Opportunity.CreatedById,\n\t\tLastModifiedDate = Opportunity.LastModifiedDate,\n\t\tLastActivityDate = Opportunity.LastActivityDate,\n\t\tContactId = Opportunity.ContactId,\n\t\tSales_Plays__c = Opportunity.Sales_Plays__c,\n\t\tCMS_Case_Number__c = Opportunity.CMS_Case_Number__c,\n\t\tHealthiness_Category__c = Opportunity.Healthiness_Category__c,\n\t\tSAG_Organization__c = Opportunity.SAG_Organization__c,\n\t\tClassification_SolutionType__c = Opportunity.Classification_SolutionType__c,\n\t\tOpportunity_Source__c = Opportunity.Opportunity_Source__c,\n\t\tIndustry__c = Opportunity.Industry__c,\n\t\tKeyWords__c = Opportunity.KeyWords__c,\n\t\tAmount_Bookings_Value__c = Opportunity.Amount_Bookings_Value__c,\n\t\tAmount_Bookings__c = Opportunity.Amount_Bookings__c,\n\t\tAmount_DBP_Combined_Bookings__c = Opportunity.Amount_DBP_Combined_Bookings__c,\n\t\tSAG_Organization_Account__c = Opportunity.SAG_Organization_Account__c,\n\t\tGDD_Number__c = Opportunity.GDD_Number__c,\n\t\tReason_s_for_non_competitive_loss__c = Opportunity.Reason_s_for_non_competitive_loss__c,\n\t\tReason_s_for_competitive_loss__c = Opportunity.Reason_s_for_competitive_loss__c,\n\t\tAmount_A2_Bookings__c = Opportunity.Amount_A2_Bookings__c,\n\t\tAmount_A_N_Bookings__c = Opportunity.Amount_A_N_Bookings__c,\n\t\tAmount_Integration_Bookings__c = Opportunity.Amount_Integration_Bookings__c,\n\t\tAmount_IoT_Analytics_Bookings__c = Opportunity.Amount_IoT_Analytics_Bookings__c,\n\t\tGDD_Version_Number__c = Opportunity.GDD_Version_Number__c,\n\t\tBoard_Responsible__c = Opportunity.Board_Responsible__c,\n\t\tDivision__c = Opportunity.Division__c,\n\t\tCluster__c = Opportunity.Cluster__c,\n\t\tSales_Region__c = Opportunity.Sales_Region__c,\n\t\tSales_Sub_Region__c = Opportunity.Sales_Sub_Region__c,\n\t\tType_of_Opportunity__c = Opportunity.Type_of_Opportunity__c,\n\t\tOpportunity_Number__c = Opportunity.Opportunity_Number__c,\n\t\tOpportunity_Record_Type_Text__c = Opportunity.Opportunity_Record_Type_Text__c,\n\t\tDate_5__c = Opportunity.Date_5__c,\n\t\tALTF__Altify_Opportunity__c = Opportunity.ALTF__Altify_Opportunity__c,\n\t\tAmount_100__c = Opportunity.Amount_100__c,\n\t\tAge__c = Opportunity.Age__c,\n\t\tAltify_Opportunity_Plan_Score__c = Opportunity.Altify_Opportunity_Plan_Score__c,\n\t\tSQO_Accepted_Month__c = Opportunity.SQO_Accepted_Month__c,\n\t\tIncremental__c = Opportunity.Incremental__c,\n\t\tCount_Opp_Partners__c = Opportunity.Count_Opp_Partners__c,\n\t\tPrimary_Campaign_Category__c = Opportunity.Primary_Campaign_Category__c,\n\t\tSales_Organization__c = Opportunity.Sales_Organization__c,\n\t\tDeal_Type__c = Opportunity.Deal_Type__c,\n\t\tSQO_Accepted_Date__c = Opportunity.SQO_Accepted_Date__c,\n\t\tCount_Primary_Partners__c = Opportunity.Count_Primary_Partners__c,\n\t\tAmount_10__c = Opportunity.Amount_10__c,\n\t\tAmount_30__c = Opportunity.Amount_30__c,\n\t\tCMS_Link__c = Opportunity.CMS_Link__c,\n\t\tAmount_Value__c = Opportunity.Amount_Value__c,\n\t\tRenewal__c = Opportunity.Renewal__c,\n\t\tAmount_50__c = Opportunity.Amount_50__c,\n\t\tAmount_70__c = Opportunity.Amount_70__c,\n\t\tAmount_90__c = Opportunity.Amount_90__c,\n\t\tDate_30__c = Opportunity.Date_30__c,\n\t\tDate_50__c = Opportunity.Date_50__c,\n\t\tDate_70__c = Opportunity.Date_70__c,\n\t\tDate_90__c = Opportunity.Date_90__c,\n\t\tDuration_10_30__c = Opportunity.Duration_10_30__c,\n\t\tDuration_30_50__c = Opportunity.Duration_30_50__c,\n\t\tDuration_50_70__c = Opportunity.Duration_50_70__c,\n\t\tDuration_70_90__c = Opportunity.Duration_70_90__c,\n\t\tSQO_Age__c = Opportunity.SQO_Age__c,\n\t\tDuration_90_100__c = Opportunity.Duration_90_100__c,\n\t\tAltify_Completeness__c = Opportunity.Altify_Completeness__c,\n\t\tDate_100__c = Opportunity.Date_100__c,\n\t\tAmount_TrendMiner_Bookings__c = Opportunity.Amount_TrendMiner_Bookings__c,\n\t\tOutreach_Last_Touch_Contact__c = Opportunity.Outreach_Last_Touch_Contact__c,\n\t\tOutreach_Last_Touch_Sequence__c = Opportunity.Outreach_Last_Touch_Sequence__c,\n\t\tPrimary_Contact__c = Opportunity.Primary_Contact__c,\n\t\tAltify_Plan_Status__c = Opportunity.Altify_Plan_Status__c,\n\t\tAltify_Reporting_Amount__c = Opportunity.Altify_Reporting_Amount__c,\n\t\tAltify_Sales_Process_Status__c = Opportunity.Altify_Sales_Process_Status__c,\n\t\tAltify_T_I_Status__c = Opportunity.Altify_T_I_Status__c,\n\t\tIngestionDate\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> JsonToTabularFormat\nJsonToTabularFormat filter(not(isNull(Id))) ~> RemoveNullValuesFromId\nRemoveNullValuesFromId derive(IngestionDate = toDate(split(split(IngestionDate, '/')[6],'_')[1])) ~> ConvertIngestionDateFromStringToDate\nConvertIngestionDateFromStringToDate sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> StoreToDatabase"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/IngestSalesforceOpportunitiesToStagingInInitialLoad')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Salesforce"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "SalesforceOpportunitiesFromBlob",
+								"type": "DatasetReference"
+							},
+							"name": "SalesforceOpportunitiesFromBlob"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "StgSfOpportunityToStagingIn",
+								"type": "DatasetReference"
+							},
+							"name": "StoreToDatabase"
+						}
+					],
+					"transformations": [
+						{
+							"name": "JsonToTabularFormat"
+						},
+						{
+							"name": "RemoveNullValuesFromId"
+						},
+						{
+							"name": "ConvertIngestionDateFromStringToDate"
+						}
+					],
+					"script": "source(output(\n\t\tOpportunity as ({@xsi:type} as string, ALTF__Altify_Opportunity__c as string, AccountId as string, Age__c as double, Altify_Completeness__c as double, Altify_Opportunity_Plan_Score__c as double, Altify_Plan_Status__c as string, Altify_Reporting_Amount__c as double, Altify_Sales_Process_Status__c as string, Altify_T_I_Status__c as string, Amount as double, Amount_100__c as double, Amount_10__c as double, Amount_30__c as double, Amount_50__c as double, Amount_70__c as double, Amount_90__c as double, Amount_A2_Bookings__c as double, Amount_A_N_Bookings__c as double, Amount_Bookings_Value__c as double, Amount_Bookings__c as double, Amount_DBP_Combined_Bookings__c as double, Amount_Integration_Bookings__c as double, Amount_IoT_Analytics_Bookings__c as double, Amount_TrendMiner_Bookings__c as double, Amount_Value__c as double, Board_Responsible__c as string, CMS_Case_Number__c as double, CMS_Link__c as string, CampaignId as string, Classification_SolutionType__c as string, CloseDate as date, Cluster__c as string, ContactId as string, Count_Opp_Partners__c as double, Count_Primary_Partners__c as double, CreatedById as string, CreatedDate as string, CurrencyIsoCode as string, Date_100__c as date, Date_30__c as date, Date_50__c as date, Date_5__c as date, Date_70__c as date, Date_90__c as date, Deal_Type__c as string, Description as string, Division__c as string, Duration_10_30__c as double, Duration_30_50__c as double, Duration_50_70__c as double, Duration_70_90__c as double, Duration_90_100__c as double, ForecastCategory as string, ForecastCategoryName as string, GDD_Number__c as string, GDD_Version_Number__c as short, Healthiness_Category__c as string, Id as string, Incremental__c as boolean, Industry__c as string, IsClosed as boolean, IsWon as boolean, KeyWords__c as string, LastActivityDate as date, LastModifiedDate as string, LeadSource as string, Name as string, Opportunity_Number__c as integer, Opportunity_Record_Type_Text__c as string, Opportunity_Source__c as string, Outreach_Last_Touch_Contact__c as string, Outreach_Last_Touch_Sequence__c as string, OwnerId as string, Primary_Campaign_Category__c as string, Primary_Contact__c as string, Probability as double, Reason_s_for_competitive_loss__c as string, Reason_s_for_non_competitive_loss__c as string, RecordTypeId as string, Renewal__c as boolean, SAG_Organization_Account__c as string, SAG_Organization__c as string, SQO_Accepted_Date__c as date, SQO_Accepted_Month__c as double, SQO_Age__c as double, Sales_Organization__c as string, Sales_Plays__c as string, Sales_Region__c as string, Sales_Sub_Region__c as string, StageName as string, Type as string, Type_of_Opportunity__c as string, {ens:type} as string)[]\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'IngestionDate',\n\tdocumentForm: 'documentPerLine',\n\twildcardPaths:['Salesforce/Opportunity/*/*/*.json']) ~> SalesforceOpportunitiesFromBlob\nSalesforceOpportunitiesFromBlob foldDown(unroll(Opportunity),\n\tmapColumn(\n\t\tId = Opportunity.Id,\n\t\tAccountId = Opportunity.AccountId,\n\t\tRecordTypeId = Opportunity.RecordTypeId,\n\t\tName = Opportunity.Name,\n\t\tDescription = Opportunity.Description,\n\t\tStageName = Opportunity.StageName,\n\t\tAmount = Opportunity.Amount,\n\t\tProbability = Opportunity.Probability,\n\t\tCloseDate = Opportunity.CloseDate,\n\t\tType = Opportunity.Type,\n\t\tLeadSource = Opportunity.LeadSource,\n\t\tIsClosed = Opportunity.IsClosed,\n\t\tIsWon = Opportunity.IsWon,\n\t\tForecastCategory = Opportunity.ForecastCategory,\n\t\tForecastCategoryName = Opportunity.ForecastCategoryName,\n\t\tCurrencyIsoCode = Opportunity.CurrencyIsoCode,\n\t\tCampaignId = Opportunity.CampaignId,\n\t\tOwnerId = Opportunity.OwnerId,\n\t\tCreatedDate = Opportunity.CreatedDate,\n\t\tCreatedById = Opportunity.CreatedById,\n\t\tLastModifiedDate = Opportunity.LastModifiedDate,\n\t\tLastActivityDate = Opportunity.LastActivityDate,\n\t\tContactId = Opportunity.ContactId,\n\t\tSales_Plays__c = Opportunity.Sales_Plays__c,\n\t\tCMS_Case_Number__c = Opportunity.CMS_Case_Number__c,\n\t\tHealthiness_Category__c = Opportunity.Healthiness_Category__c,\n\t\tSAG_Organization__c = Opportunity.SAG_Organization__c,\n\t\tClassification_SolutionType__c = Opportunity.Classification_SolutionType__c,\n\t\tOpportunity_Source__c = Opportunity.Opportunity_Source__c,\n\t\tIndustry__c = Opportunity.Industry__c,\n\t\tKeyWords__c = Opportunity.KeyWords__c,\n\t\tAmount_Bookings_Value__c = Opportunity.Amount_Bookings_Value__c,\n\t\tAmount_Bookings__c = Opportunity.Amount_Bookings__c,\n\t\tAmount_DBP_Combined_Bookings__c = Opportunity.Amount_DBP_Combined_Bookings__c,\n\t\tSAG_Organization_Account__c = Opportunity.SAG_Organization_Account__c,\n\t\tGDD_Number__c = Opportunity.GDD_Number__c,\n\t\tReason_s_for_non_competitive_loss__c = Opportunity.Reason_s_for_non_competitive_loss__c,\n\t\tReason_s_for_competitive_loss__c = Opportunity.Reason_s_for_competitive_loss__c,\n\t\tAmount_A2_Bookings__c = Opportunity.Amount_A2_Bookings__c,\n\t\tAmount_A_N_Bookings__c = Opportunity.Amount_A_N_Bookings__c,\n\t\tAmount_Integration_Bookings__c = Opportunity.Amount_Integration_Bookings__c,\n\t\tAmount_IoT_Analytics_Bookings__c = Opportunity.Amount_IoT_Analytics_Bookings__c,\n\t\tGDD_Version_Number__c = Opportunity.GDD_Version_Number__c,\n\t\tBoard_Responsible__c = Opportunity.Board_Responsible__c,\n\t\tDivision__c = Opportunity.Division__c,\n\t\tCluster__c = Opportunity.Cluster__c,\n\t\tSales_Region__c = Opportunity.Sales_Region__c,\n\t\tSales_Sub_Region__c = Opportunity.Sales_Sub_Region__c,\n\t\tType_of_Opportunity__c = Opportunity.Type_of_Opportunity__c,\n\t\tOpportunity_Number__c = Opportunity.Opportunity_Number__c,\n\t\tOpportunity_Record_Type_Text__c = Opportunity.Opportunity_Record_Type_Text__c,\n\t\tDate_5__c = Opportunity.Date_5__c,\n\t\tALTF__Altify_Opportunity__c = Opportunity.ALTF__Altify_Opportunity__c,\n\t\tAmount_100__c = Opportunity.Amount_100__c,\n\t\tAge__c = Opportunity.Age__c,\n\t\tAltify_Opportunity_Plan_Score__c = Opportunity.Altify_Opportunity_Plan_Score__c,\n\t\tSQO_Accepted_Month__c = Opportunity.SQO_Accepted_Month__c,\n\t\tIncremental__c = Opportunity.Incremental__c,\n\t\tCount_Opp_Partners__c = Opportunity.Count_Opp_Partners__c,\n\t\tPrimary_Campaign_Category__c = Opportunity.Primary_Campaign_Category__c,\n\t\tSales_Organization__c = Opportunity.Sales_Organization__c,\n\t\tDeal_Type__c = Opportunity.Deal_Type__c,\n\t\tSQO_Accepted_Date__c = Opportunity.SQO_Accepted_Date__c,\n\t\tCount_Primary_Partners__c = Opportunity.Count_Primary_Partners__c,\n\t\tAmount_10__c = Opportunity.Amount_10__c,\n\t\tAmount_30__c = Opportunity.Amount_30__c,\n\t\tCMS_Link__c = Opportunity.CMS_Link__c,\n\t\tAmount_Value__c = Opportunity.Amount_Value__c,\n\t\tRenewal__c = Opportunity.Renewal__c,\n\t\tAmount_50__c = Opportunity.Amount_50__c,\n\t\tAmount_70__c = Opportunity.Amount_70__c,\n\t\tAmount_90__c = Opportunity.Amount_90__c,\n\t\tDate_30__c = Opportunity.Date_30__c,\n\t\tDate_50__c = Opportunity.Date_50__c,\n\t\tDate_70__c = Opportunity.Date_70__c,\n\t\tDate_90__c = Opportunity.Date_90__c,\n\t\tDuration_10_30__c = Opportunity.Duration_10_30__c,\n\t\tDuration_30_50__c = Opportunity.Duration_30_50__c,\n\t\tDuration_50_70__c = Opportunity.Duration_50_70__c,\n\t\tDuration_70_90__c = Opportunity.Duration_70_90__c,\n\t\tSQO_Age__c = Opportunity.SQO_Age__c,\n\t\tDuration_90_100__c = Opportunity.Duration_90_100__c,\n\t\tAltify_Completeness__c = Opportunity.Altify_Completeness__c,\n\t\tDate_100__c = Opportunity.Date_100__c,\n\t\tAmount_TrendMiner_Bookings__c = Opportunity.Amount_TrendMiner_Bookings__c,\n\t\tOutreach_Last_Touch_Contact__c = Opportunity.Outreach_Last_Touch_Contact__c,\n\t\tOutreach_Last_Touch_Sequence__c = Opportunity.Outreach_Last_Touch_Sequence__c,\n\t\tPrimary_Contact__c = Opportunity.Primary_Contact__c,\n\t\tAltify_Plan_Status__c = Opportunity.Altify_Plan_Status__c,\n\t\tAltify_Reporting_Amount__c = Opportunity.Altify_Reporting_Amount__c,\n\t\tAltify_Sales_Process_Status__c = Opportunity.Altify_Sales_Process_Status__c,\n\t\tAltify_T_I_Status__c = Opportunity.Altify_T_I_Status__c,\n\t\tIngestionDate\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> JsonToTabularFormat\nJsonToTabularFormat filter(not(isNull(Id))) ~> RemoveNullValuesFromId\nRemoveNullValuesFromId derive(IngestionDate = toDate(split(split(IngestionDate, '/')[6],'_')[1])) ~> ConvertIngestionDateFromStringToDate\nConvertIngestionDateFromStringToDate sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> StoreToDatabase"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/IngestSalesforceAccountToStaging')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "IngestSalesforceAccountToStagingInDaily",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "IngestSalesforceAccountToStagingInDaily",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"SalesforceAccountsFromBlob": {},
+									"StoreToDatabase": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "Salesforce"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-03-02T18:37:23Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/IngestSalesforceCampaignMemberToStaging')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "IngestSalesforceCampaignMemberToStagingInDaily",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "IngestSalesforceCampaignMemberToStagingInDaily",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"SalesforceCampaignMembersFromBlob": {},
+									"StoreToDatabase": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "Salesforce"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-03-02T16:50:04Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/IngestSalesforceCampaignToStaging')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "IngestSalesforceCampaignToStagingInDaily",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "IngestSalesforceCampaignToStagingInDaily",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"SalesforceCampaignsFromBlob": {},
+									"StoreToDatabase": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "Salesforce"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-03-02T16:08:18Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/IngestSalesforceCampaignToStagingInDaily')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/IngestSalesforceContactToStaging')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "IngestSalesforceContactToStagingInDaily",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "IngestSalesforceContactToStagingInDaily",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"SalesforceContactsFromBlob": {},
+									"StoreToDatabase": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "Salesforce"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-03-02T18:22:28Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/IngestSalesforceContactToStagingInDaily')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/IngestSalesforceLeadToStagingIn')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "IngestSalesforceLeadsToStagingInDaily",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "IngestSalesforceLeadsToStagingInDaily",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"SalesforceLeadsFromBlob": {},
+									"StoreToDatabase": {}
+								}
+							},
+							"staging": {},
+							"integrationRuntime": {
+								"referenceName": "integrationRuntimeLargeFiles",
+								"type": "IntegrationRuntimeReference"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "Salesforce"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-03-02T16:22:22Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/IngestSalesforceLeadsToStagingInDaily')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/IngestSalesforceOpportunityToStagingIn')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "IngestSalesforceOpportunitiesToStagingInDaily",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "IngestSalesforceOpportunitiesToStagingInDaily",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"SalesforceOpportunitiesFromBlob": {},
+									"StoreToDatabase": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "Salesforce"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-03-01T12:06:19Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/IngestSalesforceOpportunitiesToStagingInDaily')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/IngestSalesForceLead')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "IngestSalesforceLeadToStagingIn",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2022-03-02T16:15:00Z",
+						"timeZone": "UTC"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/IngestSalesforceLeadToStagingIn')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/IngestSalesforceFromBlob')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "IngestSalesforceOpportunityToStagingIn",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "IngestSalesforceCampaignToStaging",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "IngestSalesforceCampaignMemberToStaging",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "IngestSalesforceContactToStaging",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "IngestSalesforceAccountToStaging",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2022-03-01T15:00:00",
+						"timeZone": "W. Europe Standard Time"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/IngestSalesforceOpportunityToStagingIn')]",
+				"[concat(variables('factoryId'), '/pipelines/IngestSalesforceCampaignToStaging')]",
+				"[concat(variables('factoryId'), '/pipelines/IngestSalesforceCampaignMemberToStaging')]",
+				"[concat(variables('factoryId'), '/pipelines/IngestSalesforceContactToStaging')]",
+				"[concat(variables('factoryId'), '/pipelines/IngestSalesforceAccountToStaging')]"
+			]
+		}
+	]
+}
