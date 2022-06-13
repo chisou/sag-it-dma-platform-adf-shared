@@ -10,7 +10,263 @@
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",
-		"schema": [],
+		"schema": [
+			{
+				"name": "Account_ID_with_18_Char__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Account_Owner_Role__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Address_Visit_Country__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Address_Visit_State__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "AnnualRevenue",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Board_Responsible__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Classification_AnnualRev_Range__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Classification_EmployeesRange__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Classification_PersonalPriority__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Classification_Status__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Cluster__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CreatedDate",
+				"type": "date"
+			},
+			{
+				"name": "CurrencyIsoCode",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Customer_Classification__c",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "DNBoptimizer__DNB_D_U_N_S_Number__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DNBoptimizer__DnBCompanyRecord__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DUNS_Number__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Date_of_First_Contact__c",
+				"type": "date"
+			},
+			{
+				"name": "Division__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Domestic_Ultimate_DUNS_Number__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Global_Ultimate_DUNS_Number__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Go_To_Market_Segmentation__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Has_Altify_Account__c",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Industry",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Industry_Sub__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "KeyWords__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Key_Accounts__c",
+				"type": "bit"
+			},
+			{
+				"name": "LastActivityDate",
+				"type": "date"
+			},
+			{
+				"name": "LastModifiedDate",
+				"type": "date"
+			},
+			{
+				"name": "Name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "NumberOfEmployees",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Opportunity_Bookings_Open__c",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Opportunity_Count_Open__c",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Opportunity_Count__c",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "OwnerId",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ParentId",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Parent_Account_Account_Id_18__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Partner_Level__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SAG_Organization__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "SAP_Contract_Count_Active__c",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "SAP_Contract_Count__c",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Sales_Region__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Sales_Sub_Region__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Type",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Type_Sub__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Website",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Website_Domain__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "accountBuyingStage6sense_INT__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "accountBuyingStage6sense_IoT__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "accountIntentScore6sense_INT__c",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "accountIntentScore6sense_IoT__c",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "accountProfileFit6sense_INT__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "accountProfileFit6sense_IoT__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "accountReachScore6sense_INT__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "accountReachScore6sense_IoT__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "IngestionDate",
+				"type": "date"
+			},
+			{
+				"name": "A_N_Likely_to_Convert__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Integration_Likely_To_Convert__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "A2_Likely_to_Convert__c",
+				"type": "nvarchar"
+			},
+			{
+				"name": "IoT_Likely_to_Convert__c",
+				"type": "nvarchar"
+			}
+		],
 		"typeProperties": {
 			"schema": "STG",
 			"table": "STG_SF_Account"
