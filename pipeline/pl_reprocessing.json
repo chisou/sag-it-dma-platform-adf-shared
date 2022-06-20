@@ -27,7 +27,7 @@
 				}
 			},
 			{
-				"name": "IngestSalesforceCampaignToStagingInDaily",
+				"name": "IngestSalesforceCampaignMemberToStagingInDaily",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -40,7 +40,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "IngestSalesforceCampaignToStagingInDaily",
+						"referenceName": "IngestSalesforceCampaignMemberToStagingInDaily",
 						"type": "DataFlowReference"
 					},
 					"compute": {
