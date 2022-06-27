@@ -13,7 +13,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "2022-06-25_Account.json",
+				"fileName": "2022-06-26_Account.json",
 				"folderPath": "Salesforce/Account/2022/06",
 				"container": "stsagitdmastagingmarketing"
 			}
