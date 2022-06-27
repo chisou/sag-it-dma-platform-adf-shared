@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "IngestSalesforceLeadsToStagingInDaily",
+				"name": "IngestSalesforceAccountToStagingInDaily",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -16,7 +16,55 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "IngestSalesforceLeadsToStagingInDaily",
+						"referenceName": "IngestSalesforceAccountToStagingInDaily",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			},
+			{
+				"name": "IngestSalesforceCampaignMemberToStagingInDaily",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "1.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "IngestSalesforceCampaignMemberToStagingInDaily",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			},
+			{
+				"name": "IngestSalesforceContactToStagingInDaily",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "1.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "IngestSalesforceContactToStagingInDaily",
 						"type": "DataFlowReference"
 					},
 					"compute": {
