@@ -1,0 +1,24 @@
+{
+	"name": "SalesforceLeadFromBlob_05_07_2022",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ConnectionToBlob",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Salesforce"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "2022-07-05_Lead.json",
+				"folderPath": "Salesforce/Lead/2022/07",
+				"container": "stsagitdmastagingmarketing"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
