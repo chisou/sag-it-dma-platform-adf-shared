@@ -214,12 +214,6 @@
 							},
 							"ARIS_Trial_Logins_Lead__c": {
 								"type": "null"
-							},
-							"ens:type": {
-								"type": "string"
-							},
-							"@xsi:type": {
-								"type": "string"
 							}
 						}
 					}
