@@ -39,10 +39,10 @@
 								"type": "string"
 							},
 							"State": {
-								"type": "string"
+								"type": "null"
 							},
 							"Country": {
-								"type": "string"
+								"type": "null"
 							},
 							"Status": {
 								"type": "string"
@@ -54,16 +54,16 @@
 								"type": "string"
 							},
 							"NumberOfEmployees": {
-								"type": "integer"
+								"type": "null"
 							},
 							"OwnerId": {
 								"type": "string"
 							},
 							"ConvertedDate": {
-								"type": "date"
+								"type": "null"
 							},
 							"ConvertedContactId": {
-								"type": "string"
+								"type": "null"
 							},
 							"CreatedDate": {
 								"type": "string"
@@ -72,7 +72,7 @@
 								"type": "string"
 							},
 							"LastActivityDate": {
-								"type": "date"
+								"type": "null"
 							},
 							"Annual_Revenue_Range__c": {
 								"type": "string"
@@ -81,43 +81,43 @@
 								"type": "string"
 							},
 							"Link_Account__c": {
-								"type": "string"
+								"type": "null"
 							},
 							"Qualification_Date_FirstContact__c": {
-								"type": "date"
+								"type": "null"
 							},
 							"Classification_SolutionType__c": {
-								"type": "string"
+								"type": "null"
 							},
 							"Age_LastModified__c": {
 								"type": "string"
 							},
 							"Age_LastActivity__c": {
-								"type": "double"
+								"type": "null"
 							},
 							"Customer_Segmentation__c": {
-								"type": "string"
+								"type": "null"
 							},
 							"Sales_Region__c": {
 								"type": "string"
 							},
 							"Sales_Sub_Region__c": {
-								"type": "string"
+								"type": "null"
 							},
 							"Qualification_DisregardedReason__c": {
-								"type": "string"
+								"type": "null"
 							},
 							"SAG_Organization__c": {
 								"type": "string"
 							},
 							"Industry_Sub__c": {
-								"type": "string"
+								"type": "null"
 							},
 							"Domestic_Ultimate_DUNS_Number__c": {
-								"type": "integer"
+								"type": "null"
 							},
 							"DUNS_Number__c": {
-								"type": "string"
+								"type": "null"
 							},
 							"Partner_Lead__c": {
 								"type": "string"
@@ -126,7 +126,7 @@
 								"type": "string"
 							},
 							"Job_Title_Standardized__c": {
-								"type": "string"
+								"type": "null"
 							},
 							"Most_Recent_Campaign_Date__c": {
 								"type": "string"
@@ -135,49 +135,49 @@
 								"type": "string"
 							},
 							"MQL_Date__c": {
-								"type": "string"
+								"type": "null"
 							},
 							"Most_Recent_Campaign__c": {
-								"type": "string"
+								"type": "null"
 							},
 							"Most_Recent_Campaign_Sales_Playbook__c": {
-								"type": "string"
+								"type": "null"
 							},
 							"bizible2__Account__c": {
-								"type": "string"
+								"type": "null"
 							},
 							"bizible2__Ad_Campaign_Name_FT__c": {
-								"type": "string"
+								"type": "null"
 							},
 							"bizible2__Ad_Campaign_Name_LC__c": {
-								"type": "string"
+								"type": "null"
 							},
 							"bizible2__BizibleId__c": {
-								"type": "string"
+								"type": "null"
 							},
 							"bizible2__Landing_Page_FT__c": {
-								"type": "string"
+								"type": "null"
 							},
 							"bizible2__Landing_Page_LC__c": {
-								"type": "string"
+								"type": "null"
 							},
 							"bizible2__Marketing_Channel_FT__c": {
-								"type": "string"
+								"type": "null"
 							},
 							"bizible2__Marketing_Channel_LC__c": {
-								"type": "string"
+								"type": "null"
 							},
 							"bizible2__Touchpoint_Date_FT__c": {
-								"type": "string"
+								"type": "null"
 							},
 							"bizible2__Touchpoint_Date_LC__c": {
-								"type": "string"
+								"type": "null"
 							},
 							"bizible2__Touchpoint_Source_FT__c": {
-								"type": "string"
+								"type": "null"
 							},
 							"bizible2__Touchpoint_Source_LC__c": {
-								"type": "string"
+								"type": "null"
 							},
 							"accountIntentScore6sense_IoT__c": {
 								"type": "string"
@@ -189,16 +189,16 @@
 								"type": "string"
 							},
 							"Most_Recent_MQL_Date__c": {
-								"type": "string"
+								"type": "null"
 							},
 							"Most_Recent_Sales_Play_Campaign__c": {
-								"type": "string"
+								"type": "null"
 							},
 							"Lead_BU_Playbook__c": {
-								"type": "string"
+								"type": "null"
 							},
 							"Partner_Involved__c": {
-								"type": "boolean"
+								"type": "null"
 							},
 							"Incremental__c": {
 								"type": "string"
@@ -213,7 +213,7 @@
 								"type": "string"
 							},
 							"ARIS_Trial_Logins_Lead__c": {
-								"type": "string"
+								"type": "null"
 							}
 						}
 					}
