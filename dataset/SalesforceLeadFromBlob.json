@@ -90,7 +90,7 @@
 								"type": "string"
 							},
 							"Age_LastModified__c": {
-								"type": "string"
+								"type": "double"
 							},
 							"Age_LastActivity__c": {
 								"type": "double"
@@ -120,7 +120,7 @@
 								"type": "string"
 							},
 							"Partner_Lead__c": {
-								"type": "string"
+								"type": "boolean"
 							},
 							"mkto71_Lead_Score__c": {
 								"type": "string"
@@ -180,7 +180,7 @@
 								"type": "string"
 							},
 							"accountIntentScore6sense_IoT__c": {
-								"type": "string"
+								"type": "double"
 							},
 							"accountProfileFit6sense_IoT__c": {
 								"type": "string"
@@ -201,13 +201,13 @@
 								"type": "boolean"
 							},
 							"Incremental__c": {
-								"type": "string"
+								"type": "boolean"
 							},
 							"accountBuyingStage6sense_INT__c": {
 								"type": "string"
 							},
 							"accountIntentScore6sense_INT__c": {
-								"type": "string"
+								"type": "double"
 							},
 							"accountProfileFit6sense_INT__c": {
 								"type": "string"
