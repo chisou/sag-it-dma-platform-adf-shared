@@ -2,7 +2,7 @@
 	"name": "StgSfLeadToStagingIn",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "ConnectToStagingInWrkMarketing",
+			"referenceName": "ConnectToStagingIn",
 			"type": "LinkedServiceReference"
 		},
 		"folder": {
@@ -12,8 +12,8 @@
 		"type": "AzureSqlTable",
 		"schema": [],
 		"typeProperties": {
-			"schema": "WRK",
-			"table": "WRK_SF_Lead"
+			"schema": "STG",
+			"table": "STG_SF_Lead"
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
