@@ -13,11 +13,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": {
-					"value": "concat(formatDateTime(utcnow(),'yyyy/MM/yyyy-MM-dd'),'_CampaignMember.json')",
-					"type": "Expression"
-				},
-				"folderPath": "Salesforce/Campaign_Member",
+				"fileName": "2022-07-16_CampaignMember.json",
+				"folderPath": "Salesforce/Campaign_Member/2022/07",
 				"container": "stsagitdmastagingmarketing"
 			}
 		},
