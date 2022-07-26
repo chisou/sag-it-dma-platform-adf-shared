@@ -21,7 +21,208 @@
 				"container": "stsagitdmastagingmarketing"
 			}
 		},
-		"schema": {}
+		"schema": {
+			"type": "object",
+			"properties": {
+				"Lead": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"Id": {
+								"type": "string"
+							},
+							"RecordTypeId": {
+								"type": "string"
+							},
+							"Title": {
+								"type": "string"
+							},
+							"Company": {
+								"type": "string"
+							},
+							"State": {
+								"type": "string"
+							},
+							"Country": {
+								"type": "string"
+							},
+							"Status": {
+								"type": "string"
+							},
+							"Industry": {
+								"type": "string"
+							},
+							"CurrencyIsoCode": {
+								"type": "string"
+							},
+							"NumberOfEmployees": {
+								"type": "integer"
+							},
+							"OwnerId": {
+								"type": "string"
+							},
+							"ConvertedDate": {
+								"type": "date"
+							},
+							"ConvertedContactId": {
+								"type": "string"
+							},
+							"CreatedDate": {
+								"type": "string"
+							},
+							"LastModifiedDate": {
+								"type": "string"
+							},
+							"LastActivityDate": {
+								"type": "date"
+							},
+							"Annual_Revenue_Range__c": {
+								"type": "string"
+							},
+							"Account_EmployeesRange__c": {
+								"type": "string"
+							},
+							"Link_Account__c": {
+								"type": "string"
+							},
+							"Qualification_Date_FirstContact__c": {
+								"type": "date"
+							},
+							"Classification_SolutionType__c": {
+								"type": "string"
+							},
+							"Age_LastModified__c": {
+								"type": "double"
+							},
+							"Age_LastActivity__c": {
+								"type": "double"
+							},
+							"Customer_Segmentation__c": {
+								"type": "string"
+							},
+							"Sales_Region__c": {
+								"type": "string"
+							},
+							"Sales_Sub_Region__c": {
+								"type": "string"
+							},
+							"Qualification_DisregardedReason__c": {
+								"type": "string"
+							},
+							"SAG_Organization__c": {
+								"type": "string"
+							},
+							"Industry_Sub__c": {
+								"type": "string"
+							},
+							"Domestic_Ultimate_DUNS_Number__c": {
+								"type": "integer"
+							},
+							"DUNS_Number__c": {
+								"type": "string"
+							},
+							"Partner_Lead__c": {
+								"type": "boolean"
+							},
+							"mkto71_Lead_Score__c": {
+								"type": "string"
+							},
+							"Job_Title_Standardized__c": {
+								"type": "string"
+							},
+							"Most_Recent_Campaign_Date__c": {
+								"type": "string"
+							},
+							"Most_Recent_Campaign_Status__c": {
+								"type": "string"
+							},
+							"MQL_Date__c": {
+								"type": "string"
+							},
+							"Most_Recent_Campaign__c": {
+								"type": "string"
+							},
+							"Most_Recent_Campaign_Sales_Playbook__c": {
+								"type": "string"
+							},
+							"bizible2__Account__c": {
+								"type": "string"
+							},
+							"bizible2__Ad_Campaign_Name_FT__c": {
+								"type": "string"
+							},
+							"bizible2__Ad_Campaign_Name_LC__c": {
+								"type": "string"
+							},
+							"bizible2__BizibleId__c": {
+								"type": "string"
+							},
+							"bizible2__Landing_Page_FT__c": {
+								"type": "string"
+							},
+							"bizible2__Landing_Page_LC__c": {
+								"type": "string"
+							},
+							"bizible2__Marketing_Channel_FT__c": {
+								"type": "string"
+							},
+							"bizible2__Marketing_Channel_LC__c": {
+								"type": "string"
+							},
+							"bizible2__Touchpoint_Date_FT__c": {
+								"type": "string"
+							},
+							"bizible2__Touchpoint_Date_LC__c": {
+								"type": "string"
+							},
+							"bizible2__Touchpoint_Source_FT__c": {
+								"type": "string"
+							},
+							"bizible2__Touchpoint_Source_LC__c": {
+								"type": "string"
+							},
+							"accountIntentScore6sense_IoT__c": {
+								"type": "double"
+							},
+							"accountProfileFit6sense_IoT__c": {
+								"type": "string"
+							},
+							"accountBuyingStage6sense_IoT__c": {
+								"type": "string"
+							},
+							"Most_Recent_MQL_Date__c": {
+								"type": "string"
+							},
+							"Most_Recent_Sales_Play_Campaign__c": {
+								"type": "string"
+							},
+							"Lead_BU_Playbook__c": {
+								"type": "string"
+							},
+							"Partner_Involved__c": {
+								"type": "boolean"
+							},
+							"Incremental__c": {
+								"type": "boolean"
+							},
+							"accountBuyingStage6sense_INT__c": {
+								"type": "string"
+							},
+							"accountIntentScore6sense_INT__c": {
+								"type": "double"
+							},
+							"accountProfileFit6sense_INT__c": {
+								"type": "string"
+							},
+							"ARIS_Trial_Logins_Lead__c": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			}
+		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
 }
