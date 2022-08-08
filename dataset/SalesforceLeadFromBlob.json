@@ -13,8 +13,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "@concat(formatDateTime(utcnow(),'yyyy/MM/yyyy-MM-dd'),'_Lead.json')",
-				"folderPath": "Salesforce/Lead",
+				"fileName": "2022-08-07_Lead.json",
+				"folderPath": "Salesforce/Lead/2022/08",
 				"container": "stsagitdmastagingmarketing"
 			}
 		},
