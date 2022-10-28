@@ -208,6 +208,9 @@
 							},
 							"IoT_Likely_to_Convert__c": {
 								"type": "string"
+							},
+							" F4L_Likely_to_Convert__c": {
+								"type": "string"
 							}
 						}
 					}
