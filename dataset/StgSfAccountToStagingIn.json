@@ -251,7 +251,7 @@
 				"type": "date"
 			},
 			{
-				"name": "A_N_Likely_to_Convert__c",
+				"name": "F4L_Likely_to_Convert__c",
 				"type": "nvarchar"
 			},
 			{
